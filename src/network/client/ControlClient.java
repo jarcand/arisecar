@@ -1,42 +1,50 @@
-package network.robot;
+package network.client;
 
 import java.io.IOException;
 
-import simulation.robot.RobotInterface;
-
 import com.lloseng.ocsf.client.AbstractClient;
+
+import user.ControlCenter;
 import network.message.MessageControl;
 import network.message.MessageRobot;
 
-public class RobotClient extends AbstractClient{
+/**
+ * 
+ * @author Gudradain
+ *
+ */
+public class ControlClient extends AbstractClient{
 	
-	private final RobotInterface robotInterface;
-	
-	public RobotClient(RobotInterface robotInterface){
-		this("localhost", 5555, robotInterface);
+	private final ControlCenter controlCenter;
+
+	public ControlClient(ControlCenter controlCenter){
+		this("localhost", 5555, controlCenter);
 	}
 
-	public RobotClient(int port, RobotInterface robotInterface){
-		this("localhost", port, robotInterface);
+	public ControlClient(int port, ControlCenter controlCenter){
+		this("localhost", port, controlCenter);
 	}
 
-	public RobotClient(String host, int port, RobotInterface robotInterface){
+	public ControlClient(String host, int port, ControlCenter controlCenter){
 		super(host, port);
-		this.robotInterface = robotInterface;
+		this.controlCenter = controlCenter;
 		try {
 			openConnection();
 		} catch (IOException e) {
 			e.printStackTrace();
+			System.exit(0);
 		}
 	}
 	
 	@Override
 	public void sendToServer(Object msg){
-		MessageRobot message = new MessageRobot(robotInterface.getName(), msg);
-		try {
-			super.sendToServer(message);
-		} catch (IOException e) {
-			e.printStackTrace();
+		for(String robotName : controlCenter.getRobotNameList()){
+			MessageControl message = new MessageControl(robotName, msg);
+			try {
+				super.sendToServer(message);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
@@ -70,12 +78,11 @@ public class RobotClient extends AbstractClient{
 	 * @param msg   the message sent.
 	 */
 	protected void handleMessageFromServer(Object msg){
-		if(msg instanceof MessageControl){
-			MessageControl message = (MessageControl)msg;
-			if(message.getUser().equals(robotInterface.getName())){
-				robotInterface.handleMessage(message);
+		if(msg instanceof MessageRobot){
+			MessageRobot message = (MessageRobot) msg;
+			if(controlCenter.getRobotNameList().contains(message.getUser())){
+				controlCenter.handleMessage(message);
 			}
 		}
 	}
-
 }

@@ -5,7 +5,7 @@ import network.message.Position;
 import com.lloseng.ocsf.server.AbstractServer;
 import com.lloseng.ocsf.server.ConnectionToClient;
 
-public class EchoServer extends AbstractServer {
+public class HostServer extends AbstractServer {
 	//Class variables *************************************************
 
 	/**
@@ -15,7 +15,7 @@ public class EchoServer extends AbstractServer {
 
 	//Constructors ****************************************************
 
-	public EchoServer(){
+	public HostServer(){
 		this(DEFAULT_PORT);
 	}
 	
@@ -24,7 +24,7 @@ public class EchoServer extends AbstractServer {
 	 *
 	 * @param port The port number to connect on.
 	 */
-	public EchoServer(int port) {
+	public HostServer(int port) {
 		super(port);
 
 		try {
@@ -45,14 +45,6 @@ public class EchoServer extends AbstractServer {
 	 */
 	public void handleMessageFromClient(Object msg, ConnectionToClient client){
 		sendToAllClients(msg);
-		/*if(client.getInfo("nom_utilisateur") == null){
-			client.setInfo("nom_utilisateur", msg);
-			map.addCar((String)msg);
-		}else{
-			map.addMessage(new Message((String)client.getInfo("nom_utilisateur"), msg));
-			//System.out.println("Message received: " + msg + " from " + client);
-			//this.sendToAllClients((String)(client.getInfo("nom_utilisateur"))+ " : " + msg);
-		}*/
 	}
 	
 	/**
@@ -88,6 +80,6 @@ public class EchoServer extends AbstractServer {
 	 *          if no argument is entered.
 	 */
 	public static void main(String[] args) {
-		new EchoServer();
+		new HostServer();
 	}
 }

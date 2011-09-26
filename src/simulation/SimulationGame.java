@@ -1,32 +1,30 @@
-package network.client;
+package simulation;
+
 
 import java.awt.Canvas;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
 import java.awt.image.BufferStrategy;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-public class ClientGame implements Runnable{
 
-	final int WIDTH = 500;
-	final int HEIGHT = 500;
+public class SimulationGame implements Runnable{
+	
+	final int WIDTH = 1000;
+	final int HEIGHT = 1000;
 	
 	JFrame frame;
 	Canvas canvas;
 	BufferStrategy bufferStrategy;
 	
-	ClientMap map;
+	private final ServerMap serverMap;
 	
-	public ClientGame(String clientName){
+	public SimulationGame(){
+		serverMap = new ServerMap();
 		
-		map = new ClientMap(clientName);
-		
-		frame = new JFrame("CLIENT - Arise car simulation (" + clientName + ")");
+		frame = new JFrame("Simulation Game - Arise car");
 		
 		JPanel panel = (JPanel) frame.getContentPane();
 		panel.setPreferredSize(new Dimension(WIDTH, HEIGHT));
@@ -37,9 +35,6 @@ public class ClientGame implements Runnable{
 		
 		panel.add(canvas);
 		
-		canvas.addMouseListener(new MouseControl());
-		canvas.addKeyListener(new KeyController());
-		
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.pack();
 		frame.setResizable(false);
@@ -49,62 +44,6 @@ public class ClientGame implements Runnable{
 		bufferStrategy = canvas.getBufferStrategy();
 		
 		canvas.requestFocus();
-	}
-	
-	private class MouseControl extends MouseAdapter{
-		
-	}
-	
-	private class KeyController extends KeyAdapter{
-		private boolean keyF = false;
-		private boolean keyD = false;
-		private boolean keyJ = false;
-		private boolean keyK = false;
-		
-		public void keyPressed(KeyEvent e){
-			if(e.getKeyCode() == KeyEvent.VK_F && keyF){
-				return;
-			}
-			if(e.getKeyCode() == KeyEvent.VK_D && keyD){
-				return;
-			}
-			if(e.getKeyCode() == KeyEvent.VK_J && keyJ){
-				return;
-			}
-			if(e.getKeyCode() == KeyEvent.VK_K && keyK){
-				return;
-			}
-			if(e.getKeyCode() == KeyEvent.VK_F){
-				keyF = true;
-			}
-			if(e.getKeyCode() == KeyEvent.VK_D){
-				keyD = true;
-			}
-			if(e.getKeyCode() == KeyEvent.VK_J){
-				keyJ = true;
-			}
-			if(e.getKeyCode() == KeyEvent.VK_K){
-				keyK = true;
-			}
-			
-			map.keyPressed(e);
-		}
-		
-		public void keyReleased(KeyEvent e){
-			if(e.getKeyCode() == KeyEvent.VK_F){
-				keyF = false;
-			}
-			if(e.getKeyCode() == KeyEvent.VK_D){
-				keyD = false;
-			}
-			if(e.getKeyCode() == KeyEvent.VK_J){
-				keyJ = false;
-			}
-			if(e.getKeyCode() == KeyEvent.VK_K){
-				keyK = false;
-			}
-			map.keyReleased(e);
-		}
 	}
 	
 	long desiredFPS = 100;
@@ -155,18 +94,16 @@ public class ClientGame implements Runnable{
 	}
 	
 	protected void render(Graphics2D g){
-		map.render(g);
+		serverMap.render(g);
 	}
 
 	protected void update(int deltaTime) {
-		map.update(deltaTime);
+		serverMap.update(deltaTime);
 	}
 	
 	public static void main(String [] args){
-		ClientGame ex = new ClientGame("Gudra");
+		SimulationGame ex = new SimulationGame();
 		new Thread(ex).start();
-		
-		//ClientGame ex2 = new ClientGame("Kalle");
-		//new Thread(ex2).start();
 	}
+
 }

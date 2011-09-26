@@ -1,6 +1,5 @@
 package network.message;
 
-import java.awt.event.KeyEvent;
 import java.io.Serializable;
 
 public class Movement implements Serializable{
@@ -9,27 +8,27 @@ public class Movement implements Serializable{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	public static final int IsPressed = 0;
-	public static final int IsReleased = 1;
+
+	private double z;
+	private double x;
+	private double y;
 	
-	private final int eventType;
-	private final KeyEvent keyEvent;
-	
-	public Movement(KeyEvent e, int eventType){
-		this.eventType = eventType;
-		keyEvent = e;
+	public Movement(double x, double y, double z){
+		this.x = x;
+		this.y = y;
+		this.z = z;
 	}
 	
-	public boolean isPressed(){
-		return eventType == IsPressed;
+	public double getX(){
+		return x;
 	}
 	
-	public boolean isReleased(){
-		return eventType == IsReleased;
+	public double getZ(){
+		return z;
 	}
 	
-	public KeyEvent getKeyEvent(){
-		return keyEvent;
+	public double getY(){
+		return y;
 	}
 
 }

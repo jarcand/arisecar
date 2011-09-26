@@ -1,5 +1,4 @@
-package network.server;
-
+package user;
 
 import java.awt.Canvas;
 import java.awt.Dimension;
@@ -9,21 +8,25 @@ import java.awt.image.BufferStrategy;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import robot.ServerMap;
+import controller.XBoxController;
 
-public class ServerGame implements Runnable{
+public class InfoGUI implements Runnable{
 	
 	final int WIDTH = 500;
 	final int HEIGHT = 500;
 	
-	JFrame frame;
-	Canvas canvas;
-	BufferStrategy bufferStrategy;
+	private final ControlCenter controlCenter;
+	private final XBoxController xbox;
 	
-	ServerMap serverMap = new ServerMap();
+	private final JFrame frame;
+	private final Canvas canvas;
+	private final BufferStrategy bufferStrategy;
 	
-	public ServerGame(){
-		frame = new JFrame("SERVER - Arise car simulation");
+	public InfoGUI(){
+		controlCenter = new ControlCenter();
+		xbox = new XBoxController();
+		
+		frame = new JFrame("Control Game - Arise Car");
 		
 		JPanel panel = (JPanel) frame.getContentPane();
 		panel.setPreferredSize(new Dimension(WIDTH, HEIGHT));
@@ -93,15 +96,15 @@ public class ServerGame implements Runnable{
 	}
 	
 	protected void render(Graphics2D g){
-		serverMap.render(g);
+		
 	}
 
 	protected void update(int deltaTime) {
-		serverMap.update(deltaTime);
+		xbox.poll();
 	}
 	
 	public static void main(String [] args){
-		ServerGame ex = new ServerGame();
+		InfoGUI ex = new InfoGUI();
 		new Thread(ex).start();
 	}
 
