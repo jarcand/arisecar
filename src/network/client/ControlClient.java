@@ -5,7 +5,7 @@ import java.io.IOException;
 import com.lloseng.ocsf.client.AbstractClient;
 
 import user.ControlCenter;
-import network.message.MessageControl;
+import network.message.MessageUser;
 import network.message.MessageRobot;
 
 /**
@@ -39,7 +39,7 @@ public class ControlClient extends AbstractClient{
 	@Override
 	public void sendToServer(Object msg){
 		for(String robotName : controlCenter.getRobotNameList()){
-			MessageControl message = new MessageControl(robotName, msg);
+			MessageUser message = new MessageUser(robotName, msg);
 			try {
 				super.sendToServer(message);
 			} catch (IOException e) {

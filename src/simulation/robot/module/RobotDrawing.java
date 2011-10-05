@@ -5,17 +5,17 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 
-import simulation.robot.AriseCar;
+import simulation.robot.RobotSim;
 
 public class RobotDrawing {
 	
-	private final AriseCar robot;
+	private final RobotSim robot;
 	private final RobotData data;
 	
 	private final int sizeMotor = 5;
 	private final int sizeDot = 25;
 	
-	public RobotDrawing(AriseCar robot, RobotData data){
+	public RobotDrawing(RobotSim robot, RobotData data){
 		this.robot = robot;
 		this.data = data;
 	}

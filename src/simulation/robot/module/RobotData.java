@@ -2,8 +2,8 @@ package simulation.robot.module;
 
 public class RobotData {
 	
-	public double rotSpeedRight = 0.010;
-	public double rotSpeedLeft = 0.020;
+	public double rotSpeedRight = 0.00;
+	public double rotSpeedLeft = 0.00;
 	public double circRight = 10;
 	public double circLeft = 10;
 	public double distanceBetweenWheel = 60;

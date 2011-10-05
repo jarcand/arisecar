@@ -2,27 +2,29 @@ package network.robot;
 
 import java.io.IOException;
 
-import simulation.robot.RobotInterface;
 
 import com.lloseng.ocsf.client.AbstractClient;
-import network.message.MessageControl;
+
 import network.message.MessageRobot;
+import network.message.MessageUser;
 
 public class RobotClient extends AbstractClient{
 	
-	private final RobotInterface robotInterface;
+	private final Robot robot;
+	private final RobotMessageControl messageControl;
 	
-	public RobotClient(RobotInterface robotInterface){
-		this("localhost", 5555, robotInterface);
+	public RobotClient(Robot robot){
+		this("localhost", 5555, robot);
 	}
 
-	public RobotClient(int port, RobotInterface robotInterface){
-		this("localhost", port, robotInterface);
+	public RobotClient(int port, Robot robot){
+		this("localhost", port, robot);
 	}
 
-	public RobotClient(String host, int port, RobotInterface robotInterface){
+	public RobotClient(String host, int port, Robot robot){
 		super(host, port);
-		this.robotInterface = robotInterface;
+		this.robot = robot;
+		messageControl = new RobotMessageControl(this, robot);
 		try {
 			openConnection();
 		} catch (IOException e) {
@@ -32,7 +34,7 @@ public class RobotClient extends AbstractClient{
 	
 	@Override
 	public void sendToServer(Object msg){
-		MessageRobot message = new MessageRobot(robotInterface.getName(), msg);
+		MessageRobot message = new MessageRobot(robot.getName(), msg);
 		try {
 			super.sendToServer(message);
 		} catch (IOException e) {
@@ -70,10 +72,10 @@ public class RobotClient extends AbstractClient{
 	 * @param msg   the message sent.
 	 */
 	protected void handleMessageFromServer(Object msg){
-		if(msg instanceof MessageControl){
-			MessageControl message = (MessageControl)msg;
-			if(message.getUser().equals(robotInterface.getName())){
-				robotInterface.handleMessage(message);
+		if(msg instanceof MessageUser){
+			MessageUser message = (MessageUser)msg;
+			if(message.getUser().equals(robot.getName())){
+				messageControl.handleMessage(message.getObject());
 			}
 		}
 	}

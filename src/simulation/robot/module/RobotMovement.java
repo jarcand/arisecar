@@ -1,94 +1,15 @@
 package simulation.robot.module;
 
-import network.message.Movement;
-import simulation.robot.AriseCar;
+import simulation.robot.RobotSim;
 
 public class RobotMovement {
 	
-	private final AriseCar robot;
+	private final RobotSim robot;
 	private final RobotData data;
 	
-	public RobotMovement(AriseCar robot, RobotData data){
+	public RobotMovement(RobotSim robot, RobotData data){
 		this.robot = robot;
 		this.data = data;
-	}
-	
-	public void handleMessage(Object obj){
-		if(obj instanceof Movement){
-			Movement movement = (Movement)obj;
-			double speed = 0.060*movement.getZ();
-			double x = movement.getX();
-			double y = movement.getY();
-			double d = Math.sqrt(x*x+y*y);
-			double angle;
-			if(d > 0.8){
-				angle = findAngle(y, x);
-			}else{
-				angle = 0;
-			}
-			
-			double value;
-			if(angle >= 0 && angle <= Math.PI){
-				if(angle <= Math.PI/2){
-					value = angle/(Math.PI/2);
-				}else{
-					value = (Math.PI - angle)/(Math.PI/2);
-				}
-				data.rotSpeedLeft = speed;
-				data.rotSpeedRight = speed*(1-value*0.5);
-			}else{
-				if(angle < 3*Math.PI/2){
-					value = (angle - Math.PI)/(Math.PI/2);
-				}else{
-					value = (2*Math.PI - angle)/(Math.PI/2);
-				}
-				data.rotSpeedLeft = speed*(1-value*0.5);
-				data.rotSpeedRight = speed;
-			}
-			
-			
-			/*if(x > 0){
-				double a = Math.acos(x);
-				double f = 1-a/(Math.PI/2);
-				data.rotSpeedLeft = speed;
-				data.rotSpeedRight = speed*(1-x*0.5);
-			}else{
-				double a = Math.acos(-x);
-				double f = 1-a/(Math.PI*2);
-				data.rotSpeedRight = speed;
-				data.rotSpeedLeft = speed*(1+x*0.5);
-			}*/
-			//data.rotSpeedLeft = speed*value;
-			//data.rotSpeedRight = speed*(-value);
-		}
-	}
-	
-	/**
-	 * The angle of the vector (x, y). The angle is between 0 and 2*PI.
-	 * @param x The x value of the vector.
-	 * @param y The y value of the vector.
-	 * @return The angle of the vector (x, y).
-	 */
-	private double findAngle(double x, double y){
-		double theta = 0;
-		if(x == 0){
-			if(y>0){
-				theta = Math.PI/2;
-			}else if(y < 0){
-				theta = Math.PI*3/2;
-			}
-		}
-		if(x > 0){
-			theta = Math.atan(y/Math.abs(x));
-		}
-		if(x < 0){
-			theta = Math.PI - Math.atan(y/Math.abs(x));
-		}
-
-		if(theta < 0){
-			theta += Math.PI*2;
-		}
-		return theta;
 	}
 	
 	public void updateMovement(int deltaTime){
@@ -162,7 +83,6 @@ public class RobotMovement {
 					centerY = data.posY + data.distanceBetweenWheel/2*Math.sin(newAngle) + dist*Math.sin(newAngle);
 					distRot = -dist - (data.distanceBetweenWheel/2);
 					speedRot = speedRight*distRot/dist;
-					System.out.println(speedRot);
 					
 					double angleRot = speedRot*deltaTime / (distRot*2*Math.PI) * (Math.PI*2);
 					double dx = distRot*Math.cos(-angleRot+data.angle-Math.PI/2);
