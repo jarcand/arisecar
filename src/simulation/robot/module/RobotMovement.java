@@ -29,7 +29,40 @@ public class RobotMovement {
 			double distRot;
 			double speedRot = 0;
 			
-			if(speedRight*speedLeft < 0){
+			if(speedRight*speedLeft == 0){
+				//The center is below one of the 2 wheel
+				if(speedRight == 0){
+					//Below right wheel
+					double newAngle = data.angle + Math.PI/2;
+					centerX = data.posX + data.distanceBetweenWheel/2*Math.cos(newAngle);
+					centerY = data.posY + data.distanceBetweenWheel/2*Math.sin(newAngle);
+					distRot = data.distanceBetweenWheel/2;
+					speedRot = distRot*speedLeft/data.distanceBetweenWheel;
+					double angleRot = (speedRot*deltaTime)/(distRot*2*Math.PI) * 2*Math.PI;
+					
+					double dx = distRot*Math.cos(angleRot + data.angle - Math.PI/2);
+					double dy = distRot*Math.sin(angleRot + data.angle - Math.PI/2);
+					
+					data.posX = centerX + dx;
+					data.posY = centerY + dy;
+					data.angle += angleRot;
+				}else{
+					//Below left wheel
+					double newAngle = data.angle - Math.PI/2;
+					centerX = data.posX + data.distanceBetweenWheel/2*Math.cos(newAngle);
+					centerY = data.posY + data.distanceBetweenWheel/2*Math.sin(newAngle);
+					distRot = data.distanceBetweenWheel/2;
+					speedRot = distRot*speedRight/data.distanceBetweenWheel;
+					double angleRot = (speedRight*deltaTime)/(data.distanceBetweenWheel*2*Math.PI) * 2*Math.PI;
+					
+					double dx = distRot*Math.cos(angleRot + data.angle - Math.PI/2);
+					double dy = distRot*Math.sin(angleRot + data.angle - Math.PI/2);
+					
+					data.posX = centerX + dx;
+					data.posY = centerY + dy;
+					data.angle += angleRot;
+				}
+			}else if(speedRight*speedLeft < 0){
 				//The center is between the 2 wheels
 				double dist = Math.abs(speedRight)/(Math.abs(speedRight)+Math.abs(speedLeft))*data.distanceBetweenWheel;
 				double newAngle = data.angle-Math.PI/2;

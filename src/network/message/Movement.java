@@ -12,11 +12,13 @@ public class Movement implements Serializable{
 	private double z;
 	private double x;
 	private double y;
+	private double rx;
 	
-	public Movement(double x, double y, double z){
+	public Movement(double x, double y, double z, double rx){
 		this.x = x;
 		this.y = y;
 		this.z = z;
+		this.rx = rx;
 	}
 	
 	public double getX(){
@@ -29,6 +31,10 @@ public class Movement implements Serializable{
 	
 	public double getY(){
 		return y;
+	}
+	
+	public double getRX(){
+		return rx;
 	}
 
 }

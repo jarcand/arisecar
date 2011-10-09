@@ -1,21 +1,51 @@
 package network.message;
 
-public class Message {
+import java.io.Serializable;
+import java.util.HashMap;
+
+public class Message implements Serializable{
 	
-	private final String user;
-	private final Object obj;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -6242001330568255693L;
+
+	private final int ID;
+	private final boolean fromRobot;
+	private final String robotName;
+	protected final HashMap<String, Object> map;
 	
-	public Message(String user, Object obj){
-		this.user = user;
-		this.obj = obj;
+	public Message(int ID, String robotName, boolean fromRobot){
+		this.ID = ID;
+		this.robotName = robotName;
+		this.fromRobot = fromRobot;
+		map = new HashMap<String, Object>();
 	}
 	
-	public String getUser(){
-		return user;
+	public int getID(){
+		return ID;
 	}
 	
-	public Object getObject(){
-		return obj;
+	public String getRobotName(){
+		return robotName;
+	}
+	
+	public boolean isFromRobot(){
+		return fromRobot;
+	}
+	
+	public void setValue(Object obj, String valueName){
+		map.put(valueName, obj);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public <E extends Object>E get(Class<E> type, String parameterName){
+		return (E)map.get(parameterName);
+	}
+	
+	@Override
+	public String toString(){
+		return "Message : " + ID;
 	}
 
 }

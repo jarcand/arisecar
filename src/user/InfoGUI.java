@@ -16,7 +16,6 @@ public class InfoGUI implements Runnable{
 	final int HEIGHT = 500;
 	
 	private final ControlCenter controlCenter;
-	private final XBoxController xbox;
 	
 	private final JFrame frame;
 	private final Canvas canvas;
@@ -24,7 +23,6 @@ public class InfoGUI implements Runnable{
 	
 	public InfoGUI(){
 		controlCenter = new ControlCenter();
-		xbox = new XBoxController();
 		
 		frame = new JFrame("Control Game - Arise Car");
 		
@@ -100,7 +98,7 @@ public class InfoGUI implements Runnable{
 	}
 
 	protected void update(int deltaTime) {
-		xbox.poll();
+		controlCenter.update(deltaTime);
 	}
 	
 	public static void main(String [] args){

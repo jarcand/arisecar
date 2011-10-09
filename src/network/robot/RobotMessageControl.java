@@ -1,8 +1,12 @@
 package network.robot;
 
+import util.Log;
 import util.Math2;
+import network.message.Message;
+import network.message.MessageCreator;
 import network.message.Movement;
 import hal.HAL;
+import hal.HALSim;
 
 public class RobotMessageControl {
 	
@@ -14,42 +18,52 @@ public class RobotMessageControl {
 		this.hal = robot.getHAL();
 	}
 	
-	public void handleMessage(Object message) {
-		if(message instanceof Movement){
-			handleMovement((Movement)message);
+	public void handleMessage(Message message) {
+		Log.println(message);
+		if(message.getID() == MessageCreator.XboxMovement){
+			handleMovement(message);
 		}
 	}
 	
-	private void handleMovement(Movement movement){
-
-		double speed = 0.060*movement.getZ();
-		double x = movement.getX();
-		double y = movement.getY();
-		double d = Math.sqrt(x*x+y*y);
-		double angle;
-		if(d > 0.8){
-			angle = Math2.findAngle(y, x);
+	private void handleMovement(Message message){
+		double x = message.get(Double.class, "x");
+		double y = message.get(Double.class, "y");
+		double z = message.get(Double.class, "z");
+		double rx = message.get(Double.class, "rx");
+		
+		if(z == 0){
+			double speed = rx*0.06;
+			hal.setLeftMotor((int) (speed*HALSim.MaxTrustMotor));
+			hal.setRightMotor((int) (-speed*HALSim.MaxTrustMotor));
 		}else{
-			angle = 0;
-		}
 
-		double value;
-		if(angle >= 0 && angle <= Math.PI){
-			if(angle <= Math.PI/2){
-				value = angle/(Math.PI/2);
+			double speed = 0.060*z;
+			double d = Math.sqrt(x*x+y*y);
+			double angle;
+			if(d > 0.8){
+				angle = Math2.findAngle(y, x);
 			}else{
-				value = (Math.PI - angle)/(Math.PI/2);
+				angle = 0;
 			}
-			hal.setLeftMotor((int) speed);
-			hal.setRightMotor((int) (speed*(1-value*0.5)));
-		}else{
-			if(angle < 3*Math.PI/2){
-				value = (angle - Math.PI)/(Math.PI/2);
+
+			double value;
+			if(angle >= 0 && angle <= Math.PI){
+				if(angle <= Math.PI/2){
+					value = angle/(Math.PI/2);
+				}else{
+					value = (Math.PI - angle)/(Math.PI/2);
+				}
+				hal.setLeftMotor((int) (speed*HALSim.MaxTrustMotor));
+				hal.setRightMotor((int) ((speed*(1-value*0.5))*HALSim.MaxTrustMotor));
 			}else{
-				value = (2*Math.PI - angle)/(Math.PI/2);
+				if(angle < 3*Math.PI/2){
+					value = (angle - Math.PI)/(Math.PI/2);
+				}else{
+					value = (2*Math.PI - angle)/(Math.PI/2);
+				}
+				hal.setLeftMotor((int) ((speed*(1-value*0.5))*HALSim.MaxTrustMotor));
+				hal.setRightMotor((int) (speed*HALSim.MaxTrustMotor));
 			}
-			hal.setLeftMotor((int) (speed*(1-value*0.5)));
-			hal.setRightMotor((int) speed);
 		}
 
 

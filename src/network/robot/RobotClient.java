@@ -2,11 +2,13 @@ package network.robot;
 
 import java.io.IOException;
 
+import util.Log;
+
 
 import com.lloseng.ocsf.client.AbstractClient;
 
-import network.message.MessageRobot;
-import network.message.MessageUser;
+import network.message.Message;
+import network.message.MessageCreator;
 
 public class RobotClient extends AbstractClient{
 	
@@ -34,7 +36,7 @@ public class RobotClient extends AbstractClient{
 	
 	@Override
 	public void sendToServer(Object msg){
-		MessageRobot message = new MessageRobot(robot.getName(), msg);
+		Message message = MessageCreator.createMessage(msg, robot.getName(), true);
 		try {
 			super.sendToServer(message);
 		} catch (IOException e) {
@@ -56,7 +58,8 @@ public class RobotClient extends AbstractClient{
 	 * @param exception the exception raised.
 	 */
 	protected void connectionException(Exception exception){
-		
+		Log.println("problem with connection");
+		exception.printStackTrace();
 	}
 
 	/**
@@ -72,10 +75,13 @@ public class RobotClient extends AbstractClient{
 	 * @param msg   the message sent.
 	 */
 	protected void handleMessageFromServer(Object msg){
-		if(msg instanceof MessageUser){
-			MessageUser message = (MessageUser)msg;
-			if(message.getUser().equals(robot.getName())){
-				messageControl.handleMessage(message.getObject());
+		Log.println(msg);
+		if(msg instanceof Message){
+			Message message = (Message)msg;
+			if(!message.isFromRobot()){
+				if(message.getRobotName().equals(robot.getName())){
+					messageControl.handleMessage(message);
+				}
 			}
 		}
 	}

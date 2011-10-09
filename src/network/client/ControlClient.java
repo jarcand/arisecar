@@ -5,8 +5,9 @@ import java.io.IOException;
 import com.lloseng.ocsf.client.AbstractClient;
 
 import user.ControlCenter;
-import network.message.MessageUser;
-import network.message.MessageRobot;
+import util.Log;
+import network.message.Message;
+import network.message.MessageCreator;
 
 /**
  * 
@@ -39,7 +40,7 @@ public class ControlClient extends AbstractClient{
 	@Override
 	public void sendToServer(Object msg){
 		for(String robotName : controlCenter.getRobotNameList()){
-			MessageUser message = new MessageUser(robotName, msg);
+			Message message = MessageCreator.createMessage(msg, robotName, false);
 			try {
 				super.sendToServer(message);
 			} catch (IOException e) {
@@ -62,14 +63,16 @@ public class ControlClient extends AbstractClient{
 	 * @param exception the exception raised.
 	 */
 	protected void connectionException(Exception exception){
-		
+		Log.println("problem with connection");
+		exception.printStackTrace();
 	}
 
 	/**
 	 * Hook method called after a connection has been established.
 	 */
 	protected void connectionEstablished(){
-
+		Log.println("Client connected");
+		sendToServer("Hello");
 	}
 
 	/**
@@ -78,10 +81,12 @@ public class ControlClient extends AbstractClient{
 	 * @param msg   the message sent.
 	 */
 	protected void handleMessageFromServer(Object msg){
-		if(msg instanceof MessageRobot){
-			MessageRobot message = (MessageRobot) msg;
-			if(controlCenter.getRobotNameList().contains(message.getUser())){
-				controlCenter.handleMessage(message);
+		if(msg instanceof Message){
+			Message message = (Message) msg;
+			if(message.isFromRobot()){
+				if(controlCenter.getRobotNameList().contains(message.getRobotName())){
+					controlCenter.handleMessage(message);
+				}
 			}
 		}
 	}

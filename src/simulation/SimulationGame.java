@@ -12,8 +12,8 @@ import javax.swing.JPanel;
 
 public class SimulationGame implements Runnable{
 	
-	final int WIDTH = 1000;
-	final int HEIGHT = 1000;
+	final int WIDTH = 500;
+	final int HEIGHT = 500;
 	
 	JFrame frame;
 	Canvas canvas;

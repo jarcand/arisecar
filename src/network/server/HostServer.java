@@ -1,6 +1,6 @@
 package network.server;
 
-import network.message.Position;
+import util.Log;
 
 import com.lloseng.ocsf.server.AbstractServer;
 import com.lloseng.ocsf.server.ConnectionToClient;
@@ -44,14 +44,9 @@ public class HostServer extends AbstractServer {
 	 * @param client The connection from which the message originated.
 	 */
 	public void handleMessageFromClient(Object msg, ConnectionToClient client){
+		Log.println(msg + " HHHHHHA ");
 		sendToAllClients(msg);
-	}
-	
-	/**
-	 * Send the position of a car to all user.
-	 */
-	public void sendPosition(Position position){
-		sendToAllClients(position);
+		
 	}
 
 	/**
@@ -60,6 +55,7 @@ public class HostServer extends AbstractServer {
 	 */
 	protected void serverStarted(){
 		System.out.println("Server listening for connections on port " + getPort());
+		handleMessageFromClient(null, null);
 	}
 
 	/**

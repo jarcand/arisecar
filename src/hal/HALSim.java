@@ -6,14 +6,15 @@ public class HALSim implements HAL {
 	
 	private final RobotData robotData;
 	
+	public static final int MaxTrustMotor = 100;
+	
 	public HALSim(RobotData robotData) {
 		this.robotData = robotData;
 	}
 
 	@Override
 	public void setLeftMotor(int thrustLevel) {
-		// TODO Auto-generated method stub
-		
+		robotData.rotSpeedLeft = robotData.MaxRotSpeed*thrustLevel/MaxTrustMotor;
 	}
 
 	@Override
@@ -24,8 +25,7 @@ public class HALSim implements HAL {
 
 	@Override
 	public void setRightMotor(int thrustLevel) {
-		// TODO Auto-generated method stub
-		
+		robotData.rotSpeedRight = robotData.MaxRotSpeed*thrustLevel/MaxTrustMotor;
 	}
 
 	@Override
