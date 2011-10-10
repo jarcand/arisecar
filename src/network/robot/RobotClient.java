@@ -75,7 +75,6 @@ public class RobotClient extends AbstractClient{
 	 * @param msg   the message sent.
 	 */
 	protected void handleMessageFromServer(Object msg){
-		Log.println(msg);
 		if(msg instanceof Message){
 			Message message = (Message)msg;
 			if(!message.isFromRobot()){

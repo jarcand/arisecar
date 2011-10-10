@@ -14,7 +14,7 @@ public class Test {
 			System.out.println("Found input device: " + ca[i].getName());
 			System.out.println("-------------------------");
 			for(Component con : ca[i].getComponents()){
-				System.out.println("Found input device: " + con.getName());
+				System.out.println("Found input device: " + con.getName() + " : " + con.getIdentifier());
 			}
 			System.out.println("============================");
 		}

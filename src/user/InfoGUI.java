@@ -8,8 +8,6 @@ import java.awt.image.BufferStrategy;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import controller.XBoxController;
-
 public class InfoGUI implements Runnable{
 	
 	final int WIDTH = 500;

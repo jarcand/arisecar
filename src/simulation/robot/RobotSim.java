@@ -6,12 +6,16 @@ import hal.HALSim;
 import java.awt.Graphics2D;
 
 import network.robot.Robot;
+import network.robot.RobotClient;
 
 import simulation.robot.module.RobotData;
 import simulation.robot.module.RobotDrawing;
 import simulation.robot.module.RobotMovement;
+import simulation.robot.module.RobotMovement;
 
-public class RobotSim extends Robot{
+public class RobotSim implements Robot{
+	
+	private final String name;
 	
 	private final RobotMovement robotMovement;
 	private final RobotDrawing robotDrawing;
@@ -19,13 +23,20 @@ public class RobotSim extends Robot{
 	private final HALSim halSim;
 	
 	public RobotSim(String name){
-		super(name);
+		this.name = name;
 		
 		robotData = new RobotData();
 		robotMovement = new RobotMovement(this, robotData);
 		robotDrawing = new RobotDrawing(this, robotData);
 		
 		halSim = new HALSim(robotData);
+		
+		new RobotClient(this);
+	}
+	
+	@Override
+	public String getName() {
+		return name;
 	}
 	
 	@Override
@@ -40,5 +51,7 @@ public class RobotSim extends Robot{
 	public void update(int deltaTime){
 		robotMovement.updateMovement(deltaTime);
 	}
+
+	
 	
 }
