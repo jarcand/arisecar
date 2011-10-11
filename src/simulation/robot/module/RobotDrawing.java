@@ -65,6 +65,10 @@ public class RobotDrawing {
 		g.setFont(new Font("stupidFont", Font.BOLD, 16));
 		g.setColor(Color.white);
 		g.drawString(robot.getName(), (int)data.posX-25, (int)data.posY+5);
+		
+		//Draw battery power
+		g.setColor(Color.yellow);
+		g.drawString("B: "+data.batteryLife+"%", (int)data.posX-30, (int)data.posY+25);
 	}
 
 }

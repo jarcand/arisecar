@@ -21,9 +21,11 @@ public class RobotSim implements Robot{
 	private final RobotDrawing robotDrawing;
 	private final RobotData robotData;
 	private final HALSim halSim;
+	private double startTimeInSeconds;
 	
 	public RobotSim(String name){
 		this.name = name;
+		startTimeInSeconds = System.currentTimeMillis()/1000;
 		
 		robotData = new RobotData();
 		robotMovement = new RobotMovement(this, robotData);
@@ -49,9 +51,22 @@ public class RobotSim implements Robot{
 	}
 	
 	public void update(int deltaTime){
-		robotMovement.updateMovement(deltaTime);
+		checkBatteryLife();
+		if(robotData.batteryLife !=0)
+			robotMovement.updateMovement(deltaTime);
 	}
 
+	private void checkBatteryLife()
+	{
+		double currentTimeInSeconds = System.currentTimeMillis()/1000;
+		double timeElapsed = currentTimeInSeconds - startTimeInSeconds;
+		for (int row = 0; row < robotData.batteryLives.length; row++) {
+                if( robotData.batteryLives[row][0] == timeElapsed)
+                {
+                	robotData.batteryLife = robotData.batteryLives[row][1];      
+                }
+            }
+	}
 	
 	
 }
