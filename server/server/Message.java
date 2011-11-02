@@ -1,4 +1,4 @@
-package network.message;
+package server;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -9,16 +9,20 @@ public class Message implements Serializable{
 	 * 
 	 */
 	private static final long serialVersionUID = -6242001330568255693L;
+	
+	public static final int ToClient = 0;
+	public static final int ToRobot = 1;
+	public static final int ToRobotAndClient = 2;
 
 	private final int ID;
-	private final boolean fromRobot;
+	private final int destination;
 	private final String robotName;
 	protected final HashMap<String, Object> map;
 	
-	public Message(int ID, String robotName, boolean fromRobot){
+	public Message(int ID, String robotName, int destination){
 		this.ID = ID;
 		this.robotName = robotName;
-		this.fromRobot = fromRobot;
+		this.destination = destination;
 		map = new HashMap<String, Object>();
 	}
 	
@@ -30,8 +34,12 @@ public class Message implements Serializable{
 		return robotName;
 	}
 	
-	public boolean isFromRobot(){
-		return fromRobot;
+	public boolean isToRobot(){
+		return ((destination == ToRobot) || (destination == ToRobotAndClient));
+	}
+	
+	public boolean isToClient(){
+		return ((destination == ToClient) || (destination == ToRobotAndClient));
 	}
 	
 	public void setValue(Object obj, String valueName){

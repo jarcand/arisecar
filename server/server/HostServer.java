@@ -1,11 +1,11 @@
-package network.server;
+package server;
 
 import util.Log;
 
 import com.lloseng.ocsf.server.AbstractServer;
 import com.lloseng.ocsf.server.ConnectionToClient;
 
-public class HostServer extends AbstractServer {
+public class HostServer extends AbstractServer{
 	//Class variables *************************************************
 
 	/**
@@ -18,7 +18,7 @@ public class HostServer extends AbstractServer {
 	public HostServer(){
 		this(DEFAULT_PORT);
 	}
-	
+
 	/**
 	 * Constructs an instance of the echo server.
 	 *
@@ -44,9 +44,9 @@ public class HostServer extends AbstractServer {
 	 * @param client The connection from which the message originated.
 	 */
 	public void handleMessageFromClient(Object msg, ConnectionToClient client){
-		Log.println(msg + " HHHHHHA ");
+		Log.println("Message from client : " + msg);
 		sendToAllClients(msg);
-		
+
 	}
 
 	/**
@@ -55,7 +55,6 @@ public class HostServer extends AbstractServer {
 	 */
 	protected void serverStarted(){
 		System.out.println("Server listening for connections on port " + getPort());
-		handleMessageFromClient(null, null);
 	}
 
 	/**
@@ -78,4 +77,5 @@ public class HostServer extends AbstractServer {
 	public static void main(String[] args) {
 		new HostServer();
 	}
+
 }

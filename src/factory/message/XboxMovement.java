@@ -1,20 +1,13 @@
-package network.message;
+package factory.message;
 
-import java.io.Serializable;
-
-public class Movement implements Serializable{
-	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+public class XboxMovement {
 
 	private double z;
 	private double x;
 	private double y;
 	private double rx;
 	
-	public Movement(double x, double y, double z, double rx){
+	public XboxMovement(double x, double y, double z, double rx){
 		this.x = x;
 		this.y = y;
 		this.z = z;

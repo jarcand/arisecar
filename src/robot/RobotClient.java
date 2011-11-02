@@ -1,19 +1,17 @@
-package network.robot;
+package robot;
 
 import java.io.IOException;
 
+import server.Message;
 import util.Log;
-
 
 import com.lloseng.ocsf.client.AbstractClient;
 
-import network.message.Message;
-import network.message.MessageCreator;
+import factory.MessageFactory;
 
-public class RobotClient extends AbstractClient{
+public class RobotClient extends AbstractClient {
 	
 	private final Robot robot;
-	private final RobotMessageControl messageControl;
 	
 	public RobotClient(Robot robot){
 		this("localhost", 5555, robot);
@@ -26,7 +24,6 @@ public class RobotClient extends AbstractClient{
 	public RobotClient(String host, int port, Robot robot){
 		super(host, port);
 		this.robot = robot;
-		messageControl = new RobotMessageControl(this, robot);
 		try {
 			openConnection();
 		} catch (IOException e) {
@@ -36,17 +33,35 @@ public class RobotClient extends AbstractClient{
 	
 	@Override
 	public void sendToServer(Object msg){
-		Message message = MessageCreator.createMessage(msg, robot.getName(), true);
+		Message message = MessageFactory.createMessage(msg, robot.getName(), Message.ToClient);
 		try {
 			super.sendToServer(message);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * Handles a message sent from the server to this client.
+	 *
+	 * @param msg   the message sent.
+	 */
+	@Override
+	protected void handleMessageFromServer(Object msg){
+		if(msg instanceof Message){
+			Message message = (Message)msg;
+			if(message.isToRobot()){
+				if(message.getRobotName().equals(robot.getName())){
+					robot.getMessageControl().handleMessage(message);
+				}
+			}
+		}
+	}
 
 	/**
 	 * Hook method called after the connection has been closed.
 	 */
+	@Override
 	protected void connectionClosed(){
 		
 	}
@@ -57,6 +72,7 @@ public class RobotClient extends AbstractClient{
 	 *
 	 * @param exception the exception raised.
 	 */
+	@Override
 	protected void connectionException(Exception exception){
 		Log.println("problem with connection");
 		exception.printStackTrace();
@@ -65,24 +81,9 @@ public class RobotClient extends AbstractClient{
 	/**
 	 * Hook method called after a connection has been established.
 	 */
+	@Override
 	protected void connectionEstablished(){
 
-	}
-
-	/**
-	 * Handles a message sent from the server to this client.
-	 *
-	 * @param msg   the message sent.
-	 */
-	protected void handleMessageFromServer(Object msg){
-		if(msg instanceof Message){
-			Message message = (Message)msg;
-			if(!message.isFromRobot()){
-				if(message.getRobotName().equals(robot.getName())){
-					messageControl.handleMessage(message);
-				}
-			}
-		}
 	}
 
 }

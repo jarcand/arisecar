@@ -1,25 +1,20 @@
-package network.robot;
+package robot;
 
+import factory.MessageFactory;
+import server.Message;
 import util.Log;
 import util.Math2;
-import network.message.Message;
-import network.message.MessageCreator;
-import network.message.Movement;
-import hal.HAL;
-import hal.HALSim;
 
 public class RobotMessageControl {
 	
-	private final RobotClient robotClient;
-	private final HAL hal;
+	private final Robot robot;
 	
-	public RobotMessageControl(RobotClient robotClient, Robot robot){
-		this.robotClient = robotClient;
-		this.hal = robot.getHAL();
+	public RobotMessageControl(Robot robot){
+		this.robot = robot;
 	}
 	
 	public void handleMessage(Message message) {
-		if(message.getID() == MessageCreator.XboxMovement){
+		if(message.getID() == MessageFactory.XboxMovement){
 			handleMovement(message);
 		}
 	}
@@ -32,8 +27,8 @@ public class RobotMessageControl {
 		
 		if(z == 0){
 			double speed = rx;
-			hal.setLeftMotor((int) (speed*HALSim.MaxTrustMotor));
-			hal.setRightMotor((int) (-speed*HALSim.MaxTrustMotor));
+			//hal.setLeftMotor((int) (speed*HALSim.MaxTrustMotor));
+			//hal.setRightMotor((int) (-speed*HALSim.MaxTrustMotor));
 		}else{
 
 			double speed = z;
@@ -52,20 +47,18 @@ public class RobotMessageControl {
 				}else{
 					value = (Math.PI - angle)/(Math.PI/2);
 				}
-				hal.setLeftMotor((int) (speed*HALSim.MaxTrustMotor));
-				hal.setRightMotor((int) ((speed*(1-value))*HALSim.MaxTrustMotor));
+				//hal.setLeftMotor((int) (speed*HALSim.MaxTrustMotor));
+				//hal.setRightMotor((int) ((speed*(1-value))*HALSim.MaxTrustMotor));
 			}else{
 				if(angle < 3*Math.PI/2){
 					value = (angle - Math.PI)/(Math.PI/2);
 				}else{
 					value = (2*Math.PI - angle)/(Math.PI/2);
 				}
-				hal.setLeftMotor((int) ((speed*(1-value))*HALSim.MaxTrustMotor));
-				hal.setRightMotor((int) (speed*HALSim.MaxTrustMotor));
+				//hal.setLeftMotor((int) ((speed*(1-value))*HALSim.MaxTrustMotor));
+				//hal.setRightMotor((int) (speed*HALSim.MaxTrustMotor));
 			}
 		}
 	}
-	
-	
 
 }
