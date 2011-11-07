@@ -16,7 +16,15 @@ public class RobotMessageControl {
 	public void handleMessage(Message message) {
 		if(message.getID() == MessageFactory.XboxMovement){
 			handleMovement(message);
+		}else if(message.getID() == MessageFactory.KeyboardMovement){
+			handleMovementKey(message);
 		}
+	}
+	
+	private void handleMovementKey(Message message){
+		int type = message.get(Integer.class, "type");
+		
+		//robot.getNode().sendInfo();
 	}
 	
 	private void handleMovement(Message message){

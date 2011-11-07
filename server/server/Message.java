@@ -13,16 +13,21 @@ public class Message implements Serializable{
 	public static final int ToClient = 0;
 	public static final int ToRobot = 1;
 	public static final int ToRobotAndClient = 2;
+	
+	public static final int FromClient = 0;
+	public static final int FromRobot = 1;
 
 	private final int ID;
 	private final int destination;
+	private final int source;
 	private final String robotName;
 	protected final HashMap<String, Object> map;
 	
-	public Message(int ID, String robotName, int destination){
+	public Message(int ID, String robotName, int destination, int source){
 		this.ID = ID;
 		this.robotName = robotName;
 		this.destination = destination;
+		this.source = source;
 		map = new HashMap<String, Object>();
 	}
 	
@@ -32,6 +37,14 @@ public class Message implements Serializable{
 	
 	public String getRobotName(){
 		return robotName;
+	}
+	
+	public boolean isFromRobot(){
+		return (source == FromRobot);
+	}
+	
+	public boolean isFromClient(){
+		return (source == FromClient);
 	}
 	
 	public boolean isToRobot(){

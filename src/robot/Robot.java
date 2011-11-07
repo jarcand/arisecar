@@ -30,5 +30,9 @@ public class Robot {
 	public RobotNode getNode(){
 		return robotNode;
 	}
+	
+	public static void main(String [] args){
+		new Robot("Gudra");
+	}
 
 }

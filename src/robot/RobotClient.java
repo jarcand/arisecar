@@ -29,11 +29,12 @@ public class RobotClient extends AbstractClient {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		System.out.println("- Client establishing connection with " + host + ":" + port);
 	}
 	
 	@Override
 	public void sendToServer(Object msg){
-		Message message = MessageFactory.createMessage(msg, robot.getName(), Message.ToClient);
+		Message message = MessageFactory.createMessage(msg, robot.getName(), Message.ToClient, Message.FromRobot);
 		try {
 			super.sendToServer(message);
 		} catch (IOException e) {
@@ -83,7 +84,7 @@ public class RobotClient extends AbstractClient {
 	 */
 	@Override
 	protected void connectionEstablished(){
-
+		System.out.println("- Connection established with " + getHost() + ":" + getPort());
 	}
 
 }
