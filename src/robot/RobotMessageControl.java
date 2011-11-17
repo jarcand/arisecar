@@ -23,7 +23,7 @@ public class RobotMessageControl {
 	
 	private void handleMovementKey(Message message){
 		int type = message.get(Integer.class, "type");
-		
+		//System.out.println("Message key : " + type);
 		//robot.getNode().sendInfo();
 	}
 	
