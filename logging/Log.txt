@@ -201,3 +201,6 @@
 - [Thu Nov 17 13:42:30 EST 2011][server][status] :Server started on port 5555
 - [Thu Nov 17 13:54:18 EST 2011][server][status] :Server started on port 5555
 - [Thu Nov 17 13:55:21 EST 2011][server][status] :Server started on port 5555
+- [Thu Nov 17 14:15:34 EST 2011][server][status] :Server started on port 5555
+- [Thu Nov 17 14:15:42 EST 2011][server][status] :Server started on port 5555
+- [Thu Nov 17 14:15:50 EST 2011][client=Thread-1][status] :Client connected to server : /127.0.0.1
