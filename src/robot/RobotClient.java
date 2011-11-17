@@ -24,12 +24,13 @@ public class RobotClient extends AbstractClient {
 	public RobotClient(String host, int port, Robot robot){
 		super(host, port);
 		this.robot = robot;
+		System.out.println("- Client establishing connection with " + host + ":" + port);
 		try {
 			openConnection();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		System.out.println("- Client establishing connection with " + host + ":" + port);
+		System.out.println("- Connection established");
 	}
 	
 	@Override
