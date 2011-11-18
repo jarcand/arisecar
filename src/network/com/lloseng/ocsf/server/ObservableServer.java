@@ -6,7 +6,6 @@ package com.lloseng.ocsf.server;
 
 import java.util.*;
 import java.io.*;
-import java.net.*;
 
 /**
  * This class acts as a subclass of <code>AbstractServer</code>

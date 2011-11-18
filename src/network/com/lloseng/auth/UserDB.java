@@ -21,12 +21,12 @@ public class UserDB {
   /**
    * The map that contains the username/password relation.
    */
-    private Map passwordMap;
+    private Map<String,String> passwordMap;
 
   /**
    * The list of user Object.
    */
-    private List principals;
+    private List<Principal> principals;
 
   /**
    * The name of the two files to be created.
@@ -45,6 +45,7 @@ public class UserDB {
     * @param  name  name of the files to be created.
     * @param  createIfNotExist if true, the files are created if they do not exist.
     */
+    @SuppressWarnings("unchecked")
     public UserDB(String name, boolean createIfNotExist) throws IOException {
     
       this.name= name;
@@ -52,19 +53,19 @@ public class UserDB {
       try {
       
         ObjectInputStream oi= new ObjectInputStream(new FileInputStream(name+PWD_EXT));    
-        passwordMap= (Map)oi.readObject();
+        passwordMap= (Map<String,String>)oi.readObject();
         oi.close();        
 
         oi= new ObjectInputStream(new FileInputStream(name+DB_EXT));    
-        principals= (List)oi.readObject();
+        principals= (List<Principal>)oi.readObject();
         oi.close();        
        
       } catch (FileNotFoundException ex) {
       
         if (createIfNotExist) {
         
-          passwordMap= new HashMap();
-          principals= new ArrayList();
+          passwordMap= new HashMap<String,String>();
+          principals= new ArrayList<Principal>();
           
         } else {
         
@@ -135,7 +136,7 @@ public class UserDB {
       
       if (pwd!=null && pwd.equals(password)) {
             
-        Iterator it= principals.iterator();
+        Iterator<Principal> it= principals.iterator();
         while(it.hasNext()) {
         
           Principal p= (Principal)it.next();
@@ -154,7 +155,7 @@ public class UserDB {
     *
     * @return An iterator to the list of usernames.
     */
-    public Iterator getNames() {
+    public Iterator<String> getNames() {
     
       return passwordMap.keySet().iterator();      
     }    
@@ -165,7 +166,7 @@ public class UserDB {
     */
     public void display() {
     
-      Iterator it= getNames();
+      Iterator<String> it= getNames();
       
       while (it.hasNext()) {
       

@@ -23,8 +23,8 @@ public class OcsfLoginModule implements LoginModule {
 
     private Subject subject;
     private CallbackHandler callbackHandler;
-    private Map sharedState;
-    private Map options;
+//    private Map sharedState;
+//    private Map options;
 
     private boolean loginSucceeded = false;
     private boolean commitSucceeded = false;
@@ -37,12 +37,12 @@ public class OcsfLoginModule implements LoginModule {
     Callback[] callbacks;
 
     public void initialize(Subject subject, CallbackHandler callbackHandler,
-            Map sharedState, Map options) {
+            Map<String,?> sharedState, Map<String,?> options) {
  
       this.subject = subject;
       this.callbackHandler = callbackHandler;
-      this.sharedState = sharedState;
-      this.options = options;
+//      this.sharedState = sharedState;
+//      this.options = options;
       
       hostname = (String)options.get("host");
       port = Integer.parseInt((String)options.get("port"));

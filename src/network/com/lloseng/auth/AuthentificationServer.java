@@ -4,9 +4,7 @@ import java.util.Observable;
 import java.util.Observer;
 import com.lloseng.ocsf.server.*;
 import javax.security.auth.callback.*;
-import javax.security.auth.*;
 import java.security.*;
-import javax.security.auth.login.*;
 import java.io.*;
 
 /**
@@ -24,7 +22,7 @@ import java.io.*;
  */
 public class AuthentificationServer implements Observer
 {
-  private ObservableServer server;
+//  private ObservableServer server;
   private UserDB userDB;
 
   /**
@@ -34,7 +32,7 @@ public class AuthentificationServer implements Observer
    */
   public AuthentificationServer(ObservableServer server, String dbName) throws IOException
   {
-    this.server= server;
+//    this.server= server;
     userDB= new UserDB(dbName,true);
     userDB.display();
   }

@@ -1,9 +1,6 @@
 package com.lloseng.auth;
 
 import java.io.*;
-import java.util.*;
-import javax.security.auth.login.*;
-import javax.security.auth.*;
 import javax.security.auth.callback.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -44,7 +41,7 @@ public class AWTCallbackHandler implements CallbackHandler {
           }
           
           dialog.setText(toc.getMessage());
-          dialog.show();
+          dialog.setVisible(true);
  
         } else if (callbacks[i] instanceof NameCallback) {
   
@@ -94,8 +91,9 @@ public class AWTCallbackHandler implements CallbackHandler {
 }
 
 class LoginWindow extends Frame {
+	private static final long serialVersionUID = -1930749615185775195L;
 
-    private Button login;
+	private Button login;
     private TextField username;
     private TextField password;
     private AWTCallbackHandler handler;
@@ -167,8 +165,9 @@ class LoginWindow extends Frame {
 }
     
 class LoginDialog extends Dialog {
+	private static final long serialVersionUID = 6805442872697721411L;
 
-    private Label message;
+	private Label message;
     private Button close;
 
     public LoginDialog(Frame owner) {
@@ -181,14 +180,14 @@ class LoginDialog extends Dialog {
         addWindowListener(new WindowAdapter() {
           public void windowClosing(WindowEvent e)
           {
-            hide();
+            setVisible(false);
           }
         });
 
         close.addActionListener(new ActionListener() {
           public void actionPerformed(ActionEvent e)
           {
-            hide();
+            setVisible(true);
           }
         });
         

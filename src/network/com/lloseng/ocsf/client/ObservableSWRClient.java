@@ -6,7 +6,6 @@ package com.lloseng.ocsf.client;
 
 import java.util.*;
 import java.io.*;
-import java.net.*;
 
 /**
  * This class acts as a subclass of <code>AbstractClient</code>
@@ -31,7 +30,7 @@ public class ObservableSWRClient extends ObservableClient
   /**
    * The service instance used to simulate multiple class inheritance.
    */
-  private ArrayList expected = new ArrayList(3);
+  private ArrayList<String> expected = new ArrayList<String>(3);
   private boolean cancelled = false;
   private int waitTime = 30000;
   private Exception exception;
@@ -70,7 +69,7 @@ public class ObservableSWRClient extends ObservableClient
   public synchronized boolean connectAndWait() throws Exception
   {
     clearAll();
-    expected.add(CONNECTION_ESTABLISHED);
+    expected.add(CONNECTION_ESTABLISHED );
 
     this.openConnection();
 
@@ -106,12 +105,12 @@ public class ObservableSWRClient extends ObservableClient
    * @exception IOException if an I/O error occurs.
    */
   public synchronized Object sendAndWaitForReply(
-                    Object message, Object expectedObject) throws Exception
+                    Object message, String expectedObject) throws Exception
   {
     clearAll();
     expected.add(expectedObject);
 
-    return sendAndWaitForReply(message, null);
+    return sendAndWaitForReply(message, (List<String>) null);
   }
 
   /**
@@ -129,7 +128,7 @@ public class ObservableSWRClient extends ObservableClient
    * @exception IOException if an I/O error occurs.
    */
   public synchronized Object sendAndWaitForReply(
-              Object message, List expectedListOfObject) throws Exception
+              Object message, List<String> expectedListOfObject) throws Exception
   {
 
     if (expectedListOfObject!=null)
