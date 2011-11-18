@@ -91,7 +91,15 @@ public class HostServer extends AbstractServer{
 	 * This method is responsible for the creation of the server instance.
 	 */
 	public static void main(String[] args) {
-		new HostServer();
+		int port = 5555;
+		if (args.length >= 1) {
+			try {
+				port = Integer.parseInt(args[0]);
+			} catch (NumberFormatException e) {
+				System.err.println("Could not parse port number, using default (" + port + ")­.");
+			}
+		}
+		new HostServer(port);
 	}
 
 }
