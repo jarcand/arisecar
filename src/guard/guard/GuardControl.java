@@ -39,7 +39,9 @@ public class GuardControl {
 		
 		@Override
 		public void keyPressed(KeyEvent e) {
+			System.out.println("pressed: " + e.getKeyCode());
 			if(e.getKeyCode() == KeyEvent.VK_UP){
+				System.out.println("up key");
 				if(!up){
 					setAllFalse();
 					up = true;
@@ -48,6 +50,7 @@ public class GuardControl {
 					guard.getClient().sendToRobot(message, Guard.DefaultName);
 				}
 			}else if(e.getKeyCode() == KeyEvent.VK_DOWN){
+				System.out.println("down key");
 				if(!down){
 					setAllFalse();
 					down = true;
@@ -56,6 +59,7 @@ public class GuardControl {
 					guard.getClient().sendToRobot(message, Guard.DefaultName);
 				}
 			}else if(e.getKeyCode() == KeyEvent.VK_LEFT){
+				System.out.println("left key");
 				if(!left){
 					setAllFalse();
 					left = true;
@@ -64,6 +68,7 @@ public class GuardControl {
 					guard.getClient().sendToRobot(message, Guard.DefaultName);
 				}
 			}else if(e.getKeyCode() == KeyEvent.VK_RIGHT){
+				System.out.println("right key");
 				if(!right){
 					setAllFalse();
 					right = true;
@@ -76,6 +81,7 @@ public class GuardControl {
 
 		@Override
 		public void keyReleased(KeyEvent e) {
+			System.out.println("released: " + e.getKeyCode());
 			if(e.getKeyCode() == KeyEvent.VK_UP){
 				if(up){
 					setAllFalse();
