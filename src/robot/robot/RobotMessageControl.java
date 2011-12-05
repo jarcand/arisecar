@@ -41,36 +41,31 @@ public class RobotMessageControl {
 	
 	private void handleMovementKey(Message message){
 		int type = message.get(Integer.class, "type");
+		System.out.println(type);
 		switch (type) {
 			case KeyboardMovement.Up:
-		        for (int i = 90; i <= 180; i += 15) {
-		        	pa.setMotorAft(i);
-		        	pa.setMotorFore(180 - i);
-			        try {
-	                    Thread.sleep(100);
-                    } catch (InterruptedException e) {
-                    }
-		        }
+	        	pa.setMotorFore(180);
+	        	pa.setMotorAft(180);
 				break;
 				
 			case KeyboardMovement.Down:
-		        for (int i = 90; i >= 0; i -= 15) {
-		        	pa.setMotorAft(i);
-		        	pa.setMotorFore(180 - i);
-			        try {
-	                    Thread.sleep(100);
-                    } catch (InterruptedException e) {
-                    }
-		        }
+	        	pa.setMotorFore(0);
+	        	pa.setMotorAft(0);
+				break;
+				
+			case KeyboardMovement.Left:
+	        	pa.setMotorFore(30);
+	        	pa.setMotorAft(150);
+				break;
+				
+			case KeyboardMovement.Right:
+	        	pa.setMotorFore(150);
+	        	pa.setMotorAft(30);
 				break;
 				
 			case KeyboardMovement.None:
-	        	pa.setMotorAft(90);
 	        	pa.setMotorFore(90);
-		        try {
-                    Thread.sleep(2000);
-                } catch (InterruptedException e) {
-                }
+	        	pa.setMotorAft(90);
 				break;
 				
 			default:
