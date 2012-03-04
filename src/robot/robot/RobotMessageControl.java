@@ -1,6 +1,6 @@
 package robot;
 
-import ca.ariselab.devices.serial.PontoonArduino;
+import ca.ariselab.devices.serial.LocoArduino;
 import ca.ariselab.lib.serialdevices.SerialDeviceID;
 import ca.ariselab.lib.serialdevices.SerialDeviceInitException;
 import factory.MessageFactory;
@@ -12,12 +12,12 @@ import util.Math2;
 public class RobotMessageControl {
 	
 	private final Robot robot;
-	private PontoonArduino pa;
+	private LocoArduino pa;
 	
 	public RobotMessageControl(Robot robot){
 		this.robot = robot;
 		try {
-	        pa = new PontoonArduino(new SerialDeviceID(0x70)) {
+	        pa = new LocoArduino(new SerialDeviceID(0x70)) {
 	        	private int i = 0;
 	            protected void inputsUpdated() {
 	            	i++;
@@ -44,28 +44,28 @@ public class RobotMessageControl {
 		System.out.println(type);
 		switch (type) {
 			case KeyboardMovement.Up:
-	        	pa.setMotorFore(180);
-	        	pa.setMotorAft(180);
+	        	pa.setMotor1(180);
+	        	pa.setMotor2(180);
 				break;
 				
 			case KeyboardMovement.Down:
-	        	pa.setMotorFore(0);
-	        	pa.setMotorAft(0);
+	        	pa.setMotor1(0);
+	        	pa.setMotor2(0);
 				break;
 				
 			case KeyboardMovement.Left:
-	        	pa.setMotorFore(30);
-	        	pa.setMotorAft(150);
+	        	pa.setMotor1(30);
+	        	pa.setMotor2(150);
 				break;
 				
 			case KeyboardMovement.Right:
-	        	pa.setMotorFore(150);
-	        	pa.setMotorAft(30);
+	        	pa.setMotor1(150);
+	        	pa.setMotor2(30);
 				break;
 				
 			case KeyboardMovement.None:
-	        	pa.setMotorFore(90);
-	        	pa.setMotorAft(90);
+	        	pa.setMotor1(90);
+	        	pa.setMotor2(90);
 				break;
 				
 			default:
