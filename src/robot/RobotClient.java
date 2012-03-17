@@ -1,51 +1,47 @@
-package guard;
+package robot;
 
 import java.io.IOException;
 
 import server.Message;
-import util.Log;
 
 import com.lloseng.ocsf.client.AbstractClient;
 
 import factory.MessageFactory;
 
-public class GuardClient extends AbstractClient {
-
-	private final Guard guard;
-
-	public GuardClient(Guard guard){
-		this("localhost", 5555, guard);
+public class RobotClient extends AbstractClient {
+	
+	private final Robot robot;
+	
+	public RobotClient(Robot robot){
+		this("localhost", 5555, robot);
 	}
 
-	public GuardClient(int port, Guard guard){
-		this("localhost", port, guard);
+	public RobotClient(int port, Robot robot){
+		this("localhost", port, robot);
 	}
 
-	public GuardClient(String host, int port, Guard guard){
+	public RobotClient(String host, int port, Robot robot){
 		super(host, port);
-		this.guard = guard;
+		this.robot = robot;
+		System.out.println("- Client establishing connection with " + host + ":" + port);
 		try {
 			openConnection();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		System.out.println("- Client establishing connection with " + host + ":" + port);
+		System.out.println("- Connection established");
 	}
 	
-	public void sendToRobot(Object msg, String robotName){
-		Message message = MessageFactory.createMessage(msg, robotName, Message.ToRobot, Message.FromClient);
-		sendToServer(message);
-	}
-
 	@Override
 	public void sendToServer(Object msg){
+		Message message = MessageFactory.createMessage(msg, robot.getName(), Message.ToClient, Message.FromRobot);
 		try {
-			super.sendToServer(msg);
+			super.sendToServer(message);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
-
+	
 	/**
 	 * Handles a message sent from the server to this client.
 	 *
@@ -55,8 +51,10 @@ public class GuardClient extends AbstractClient {
 	protected void handleMessageFromServer(Object msg){
 		if(msg instanceof Message){
 			Message message = (Message)msg;
-			if(message.isToClient()){
-				guard.getMessageControl().handleMessage(message);
+			if(message.isToRobot()){
+				if(message.getRobotName().equals(robot.getName())){
+					robot.getMessageControl().handleMessage(message);
+				}
 			}
 		}
 	}
@@ -66,7 +64,7 @@ public class GuardClient extends AbstractClient {
 	 */
 	@Override
 	protected void connectionClosed(){
-
+		
 	}
 
 	/**
@@ -77,7 +75,7 @@ public class GuardClient extends AbstractClient {
 	 */
 	@Override
 	protected void connectionException(Exception exception){
-		Log.println("problem with connection");
+		System.out.println("problem with connection");
 		exception.printStackTrace();
 	}
 
@@ -88,6 +86,5 @@ public class GuardClient extends AbstractClient {
 	protected void connectionEstablished(){
 		System.out.println("- Connection established with " + getHost() + ":" + getPort());
 	}
-
 
 }

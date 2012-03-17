@@ -1,4 +1,4 @@
-package test.guard;
+package guard.test;
 
 import guard.Guard;
 

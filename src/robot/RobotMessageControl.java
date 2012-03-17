@@ -1,13 +1,11 @@
 package robot;
 
-import ca.ariselab.devices.serial.LocoArduino;
 import ca.ariselab.lib.serialdevices.SerialDeviceID;
 import ca.ariselab.lib.serialdevices.SerialDeviceInitException;
 import factory.MessageFactory;
 import factory.message.KeyboardMovement;
+import robot.hw.LocoArduino;
 import server.Message;
-import util.Log;
-import util.Math2;
 
 public class RobotMessageControl {
 	
@@ -32,9 +30,10 @@ public class RobotMessageControl {
 	}
 	
 	public void handleMessage(Message message) {
-		if(message.getID() == MessageFactory.XboxMovement){
+		/*if(message.getID() == MessageFactory.XboxMovement){
 			handleMovement(message);
-		}else if(message.getID() == MessageFactory.KeyboardMovement){
+		}else*/
+		if(message.getID() == MessageFactory.KeyboardMovement){
 			handleMovementKey(message);
 		}
 	}
@@ -74,7 +73,7 @@ public class RobotMessageControl {
 		//System.out.println("Message key : " + type);
 		//robot.getNode().sendInfo();
 	}
-	
+/*	
 	private void handleMovement(Message message){
 		double x = message.get(Double.class, "x");
 		double y = message.get(Double.class, "y");
@@ -115,6 +114,6 @@ public class RobotMessageControl {
 				//hal.setRightMotor((int) (speed*HALSim.MaxTrustMotor));
 			}
 		}
-	}
+	}*/
 
 }

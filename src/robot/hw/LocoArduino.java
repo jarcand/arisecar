@@ -6,7 +6,7 @@
  * Date:        Fri 2011-02-25
  */
 
-package ca.ariselab.devices.serial;
+package robot.hw;
 
 import java.io.IOException;
 import ca.ariselab.lib.serialdevices.SerialDeviceID;
@@ -147,6 +147,7 @@ public abstract class LocoArduino extends SerialModule {
 
 	/**
 	 * Get the latest reading of range finder 1.
+	 * It's the front left one (+30 degree)
 	 * @return The reading in centimetres.
 	 */
 	public float getRangeFinder1() {
@@ -155,6 +156,7 @@ public abstract class LocoArduino extends SerialModule {
 
 	/**
 	 * Get the latest reading of range finder 2.
+	 * It's the front one (+0 degree)
 	 * @return The reading in centimetres.
 	 */
 	public float getRangeFinder2() {
@@ -163,6 +165,7 @@ public abstract class LocoArduino extends SerialModule {
 
 	/**
 	 * Get the latest reading of range finder 3.
+	 * It's the front right one (-30 degree)
 	 * @return The reading in centimetres.
 	 */
 	public float getRangeFinder3() {
