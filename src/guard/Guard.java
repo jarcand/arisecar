@@ -22,6 +22,10 @@ public class Guard {
 		return messageControl;
 	}
 	
+	public GuardControl getControl(){
+		return control;
+	}
+	
 	public static void main(String [] args){
 		new Guard();
 	}

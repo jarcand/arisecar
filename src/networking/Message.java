@@ -1,7 +1,8 @@
-package server;
+package networking;
 
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.Map.Entry;
 
 public class Message implements Serializable{
 	
@@ -61,12 +62,17 @@ public class Message implements Serializable{
 	
 	@SuppressWarnings("unchecked")
 	public <E extends Object>E get(Class<E> type, String parameterName){
-		return (E)map.get(parameterName);
+		return (E) map.get(parameterName);
 	}
 	
 	@Override
 	public String toString(){
-		return "Message : " + ID;
+		StringBuffer sb = new StringBuffer();
+		sb.append("Message(id:").append(ID);
+		for (Entry<String, Object> entry : map.entrySet()) {
+		    sb.append(",").append(entry.getKey()).append(":").append(entry.getValue());
+		}
+		return sb.append(")").toString();
 	}
 
 }

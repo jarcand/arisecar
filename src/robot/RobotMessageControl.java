@@ -1,70 +1,53 @@
 package robot;
 
-import ca.ariselab.lib.serialdevices.SerialDeviceID;
-import ca.ariselab.lib.serialdevices.SerialDeviceInitException;
-import factory.MessageFactory;
-import factory.message.KeyboardMovement;
-import robot.hw.LocoArduino;
-import server.Message;
+import networking.KeyboardMovement;
+import networking.Message;
+import networking.MessageFactory;
 
 public class RobotMessageControl {
 	
-	private final Robot robot;
-	private LocoArduino pa;
+	private VehicleModel v;
 	
-	public RobotMessageControl(Robot robot){
-		this.robot = robot;
-		try {
-	        pa = new LocoArduino(new SerialDeviceID(0x70)) {
-	        	private int i = 0;
-	            protected void inputsUpdated() {
-	            	i++;
-	            	if (i % 20 == 0) {
-	            		System.out.print(".");
-	            	}
-	            }
-	        };
-        } catch (SerialDeviceInitException e) {
-	        e.printStackTrace();
-        }
+	public RobotMessageControl(VehicleModel v) {
+		this.v = v;
 	}
 	
 	public void handleMessage(Message message) {
-		/*if(message.getID() == MessageFactory.XboxMovement){
-			handleMovement(message);
-		}else*/
+		if(message.getID() == MessageFactory.XboxMovement){
+			handleXboxMovement(message);
+		}else
 		if(message.getID() == MessageFactory.KeyboardMovement){
-			handleMovementKey(message);
+			handleKeyboardMovement(message);
 		}
 	}
 	
-	private void handleMovementKey(Message message){
+	private void handleKeyboardMovement(Message message){
 		int type = message.get(Integer.class, "type");
 		System.out.println(type);
 		switch (type) {
 			case KeyboardMovement.Up:
-	        	pa.setMotor1(180);
-	        	pa.setMotor2(180);
+	        	v.setMotor1(180);
+	        	v.setMotor2(180);
 				break;
 				
 			case KeyboardMovement.Down:
-	        	pa.setMotor1(0);
-	        	pa.setMotor2(0);
+	        	v.setMotor1(0);
+	        	v.setMotor2(0);
 				break;
 				
 			case KeyboardMovement.Left:
-	        	pa.setMotor1(30);
-	        	pa.setMotor2(150);
+	        	v.setMotor1(30);
+	        	v.setMotor2(150);
 				break;
 				
 			case KeyboardMovement.Right:
-	        	pa.setMotor1(150);
-	        	pa.setMotor2(30);
+	        	v.setMotor1(150);
+	        	v.setMotor2(30);
 				break;
 				
 			case KeyboardMovement.None:
-	        	pa.setMotor1(90);
-	        	pa.setMotor2(90);
+	        	v.setMotor1(90);
+	        	v.setMotor2(90);
 				break;
 				
 			default:
@@ -73,13 +56,18 @@ public class RobotMessageControl {
 		//System.out.println("Message key : " + type);
 		//robot.getNode().sendInfo();
 	}
-/*	
-	private void handleMovement(Message message){
+	
+	private void handleXboxMovement(Message message){
+		@SuppressWarnings("unused")
 		double x = message.get(Double.class, "x");
+		@SuppressWarnings("unused")
 		double y = message.get(Double.class, "y");
+		@SuppressWarnings("unused")
 		double z = message.get(Double.class, "z");
-		double rx = message.get(Double.class, "rx");
+		@SuppressWarnings("unused")
+        double rx = message.get(Double.class, "rx");
 		
+		/*
 		if(z == 0){
 			double speed = rx;
 			//hal.setLeftMotor((int) (speed*HALSim.MaxTrustMotor));
@@ -114,6 +102,6 @@ public class RobotMessageControl {
 				//hal.setRightMotor((int) (speed*HALSim.MaxTrustMotor));
 			}
 		}
-	}*/
-
+		*/
+	}
 }

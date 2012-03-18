@@ -1,11 +1,11 @@
 package server;
 
-import server.logging.GeneralLog;
+import networking.Message;
 
 import com.lloseng.ocsf.server.AbstractServer;
 import com.lloseng.ocsf.server.ConnectionToClient;
 
-public class HostServer extends AbstractServer{
+public class HostServer extends AbstractServer {
 
 	/**
 	 * The default port to listen on.
@@ -15,10 +15,6 @@ public class HostServer extends AbstractServer{
 	private final GeneralLog log;
 
 	//Constructors ****************************************************
-
-	public HostServer(){
-		this(DEFAULT_PORT);
-	}
 
 	/**
 	 * Constructs an instance of the echo server.
@@ -91,7 +87,7 @@ public class HostServer extends AbstractServer{
 	 * This method is responsible for the creation of the server instance.
 	 */
 	public static void main(String[] args) {
-		int port = 5555;
+		int port = DEFAULT_PORT;
 		if (args.length >= 1) {
 			try {
 				port = Integer.parseInt(args[0]);

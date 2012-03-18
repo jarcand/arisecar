@@ -1,21 +1,31 @@
 package guard;
 
+import java.awt.Color;
+import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.geom.Point2D;
 
 import javax.swing.JFrame;
+import networking.KeyboardMovement;
 
-import factory.message.KeyboardMovement;
 
 public class GuardControl {
 	
-	private final JFrame frame;
+	public final JFrame frame;
 	private final Guard guard;
 	
 	public GuardControl(Guard guard){
 		this.guard = guard;
 		
-		frame = new JFrame("GuardControl");
+		frame = new JFrame("GuardControl") {
+            private static final long serialVersionUID = -9188506391582322204L;
+			public void paint(Graphics g) {
+				super.paint(g);
+				paintTrail(g);
+				paintVehicle(g);
+			}
+		};
 
 		frame.addKeyListener(new KeyboardControl());
 		
@@ -111,9 +121,25 @@ public class GuardControl {
 
 		@Override
 		public void keyTyped(KeyEvent e) {
-			// TODO Auto-generated method stub
-			
 		}
 		
+	}
+	
+	private void paintTrail(Graphics g) {
+		int offsetX = 300;
+		int offsetY = 300;
+		Point2D.Double lastPoint = null;
+		g.setColor(Color.ORANGE);
+		for (Point2D.Double point : guard.getMessageControl().points) {
+			if (lastPoint != null) {
+				g.drawLine(offsetX + (int) lastPoint.getX(), offsetY + (int) lastPoint.getY(), offsetX + (int) point.getX(), offsetY + (int) point.getY());
+			}
+			lastPoint = point;
+		}
+	}
+	
+	private void paintVehicle(Graphics g) {
+		//TODO
+		System.out.println("paintVehicle");
 	}
 }

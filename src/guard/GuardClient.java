@@ -1,13 +1,12 @@
 package guard;
 
 import java.io.IOException;
-
-import guard.util.Log;
-import server.Message;
+import networking.KeyboardMovement;
+import networking.Message;
+import networking.MessageFactory;
 
 import com.lloseng.ocsf.client.AbstractClient;
 
-import factory.MessageFactory;
 
 public class GuardClient extends AbstractClient {
 
@@ -32,8 +31,8 @@ public class GuardClient extends AbstractClient {
 		System.out.println("- Client establishing connection with " + host + ":" + port);
 	}
 	
-	public void sendToRobot(Object msg, String robotName){
-		Message message = MessageFactory.createMessage(msg, robotName, Message.ToRobot, Message.FromClient);
+	public void sendToRobot(KeyboardMovement msg, String robotName){
+		Message message = MessageFactory.createKeyboardMovement(msg, robotName);
 		sendToServer(message);
 	}
 

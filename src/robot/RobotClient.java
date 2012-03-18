@@ -1,28 +1,24 @@
 package robot;
 
 import java.io.IOException;
-
-import server.Message;
-
+import networking.Message;
+import networking.MessageFactory;
+import ca.ariselab.utils.LoopingThread;
 import com.lloseng.ocsf.client.AbstractClient;
 
-import factory.MessageFactory;
 
 public class RobotClient extends AbstractClient {
 	
-	private final Robot robot;
+	private final String name;
+	private final RobotMessageControl msgCtrl;
+	private final VehicleModel v;
 	
-	public RobotClient(Robot robot){
-		this("localhost", 5555, robot);
-	}
-
-	public RobotClient(int port, Robot robot){
-		this("localhost", port, robot);
-	}
-
-	public RobotClient(String host, int port, Robot robot){
+	public RobotClient(String host, int port, String robot){
 		super(host, port);
-		this.robot = robot;
+		name = robot;
+		v = new VehicleModel();
+		msgCtrl = new RobotMessageControl(v);
+		
 		System.out.println("- Client establishing connection with " + host + ":" + port);
 		try {
 			openConnection();
@@ -30,16 +26,21 @@ public class RobotClient extends AbstractClient {
 			e.printStackTrace();
 		}
 		System.out.println("- Connection established");
+		(new LoopingThread("robot updates", 0, 100) {
+            protected void mainLoop() {
+            	v.update();
+            	Message message = MessageFactory.createVehicleUpdate(getName(), v);
+            	try {
+	                sendToServer(message);
+                } catch (IOException e) {
+	                e.printStackTrace();
+                }
+            }
+		}).start();
 	}
 	
-	@Override
-	public void sendToServer(Object msg){
-		Message message = MessageFactory.createMessage(msg, robot.getName(), Message.ToClient, Message.FromRobot);
-		try {
-			super.sendToServer(message);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+	public String getName() {
+		return name;
 	}
 	
 	/**
@@ -52,8 +53,8 @@ public class RobotClient extends AbstractClient {
 		if(msg instanceof Message){
 			Message message = (Message)msg;
 			if(message.isToRobot()){
-				if(message.getRobotName().equals(robot.getName())){
-					robot.getMessageControl().handleMessage(message);
+				if(message.getRobotName().equals(getName())){
+					msgCtrl.handleMessage(message);
 				}
 			}
 		}
@@ -87,4 +88,7 @@ public class RobotClient extends AbstractClient {
 		System.out.println("- Connection established with " + getHost() + ":" + getPort());
 	}
 
+	public static void main(String[] args) {
+		new RobotClient("localhost", 5555, "Gudra");
+	}
 }

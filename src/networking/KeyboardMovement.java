@@ -1,4 +1,4 @@
-package factory.message;
+package networking;
 
 public class KeyboardMovement {
 	
