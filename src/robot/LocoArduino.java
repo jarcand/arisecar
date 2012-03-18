@@ -6,7 +6,7 @@
  * Date:        Fri 2011-02-25
  */
 
-package robot.hw;
+package robot;
 
 import java.io.IOException;
 import ca.ariselab.lib.serialdevices.SerialDeviceID;

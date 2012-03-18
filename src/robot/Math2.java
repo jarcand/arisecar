@@ -1,4 +1,4 @@
-package robot.util;
+package robot;
 
 public class Math2 {
 	
