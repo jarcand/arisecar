@@ -34,7 +34,7 @@ public class VehicleModel {
 	            protected void inputsUpdated() {
 	            	i++;
 	            	if (i % 20 == 0) {
-	            		System.out.print(".");
+//	            		System.out.print(".");
 	            	}
 	            }
 			};

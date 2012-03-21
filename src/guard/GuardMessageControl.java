@@ -9,6 +9,9 @@ public class GuardMessageControl {
 	
 	private final Guard guard;
 	public ArrayList<Point2D.Double> points = new ArrayList<Point2D.Double>();
+	public Point2D.Double currPoint = new Point2D.Double();
+	public double lastRadius = 30;
+	public double lastAngle = 0;
 	
 	public GuardMessageControl(Guard guard) {
 		this.guard = guard;
@@ -20,6 +23,9 @@ public class GuardMessageControl {
 			double y = message.get(Double.class, "posY");
 			Point2D.Double newPoint = new Point2D.Double(x, y);
 			points.add(newPoint);
+			currPoint = newPoint;
+			lastRadius = message.get(Double.class, "radius");
+			lastAngle = message.get(Double.class, "angle");
 			if (guard.getControl() != null) {
 				guard.getControl().frame.repaint();
 			}

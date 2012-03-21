@@ -7,54 +7,78 @@ import networking.MessageFactory;
 public class RobotMessageControl {
 	
 	private VehicleModel v;
+	private float forward = 0;
+	private float turnRate = 0;
 	
 	public RobotMessageControl(VehicleModel v) {
 		this.v = v;
 	}
 	
 	public void handleMessage(Message message) {
-		if(message.getID() == MessageFactory.XboxMovement){
+		if (message.getID() == MessageFactory.XboxMovement) {
 			handleXboxMovement(message);
-		}else
-		if(message.getID() == MessageFactory.KeyboardMovement){
+		} else if (message.getID() == MessageFactory.KeyboardMovement) {
 			handleKeyboardMovement(message);
 		}
 	}
 	
 	private void handleKeyboardMovement(Message message){
 		int type = message.get(Integer.class, "type");
-		System.out.println(type);
+		int state = message.get(Integer.class, "state");
 		switch (type) {
 			case KeyboardMovement.Up:
-	        	v.setMotor1(180);
-	        	v.setMotor2(180);
+				forward = state == 1 ? 1 : 0;
+//	        	v.setMotor1(180);
+//	        	v.setMotor2(180);
 				break;
 				
 			case KeyboardMovement.Down:
-	        	v.setMotor1(0);
-	        	v.setMotor2(0);
+				forward = state == 1 ? -1 : 0;
+//	        	v.setMotor1(0);
+//	        	v.setMotor2(0);
 				break;
 				
 			case KeyboardMovement.Left:
-	        	v.setMotor1(30);
-	        	v.setMotor2(150);
+				turnRate = state == 1 ? -1 : 0;
+//	        	v.setMotor1(30);
+//	        	v.setMotor2(150);
 				break;
 				
 			case KeyboardMovement.Right:
-	        	v.setMotor1(150);
-	        	v.setMotor2(30);
+				turnRate = state == 1 ? 1 : 0;
+//	        	v.setMotor1(150);
+//	        	v.setMotor2(30);
 				break;
 				
 			case KeyboardMovement.None:
-	        	v.setMotor1(90);
-	        	v.setMotor2(90);
+				forward = 0;
+				turnRate = 0;
+//	        	v.setMotor1(90);
+//	        	v.setMotor2(90);
 				break;
 				
 			default:
 				break;
 		}
+		
+		int leftMotor = Math.round((convert(forward, turnRate) + 1) * 90);
+		int rightMotor = Math.round((convert(forward, -turnRate) + 1) * 90);
+		
+		v.setMotor1(leftMotor);
+		v.setMotor2(rightMotor);
+		
 		//System.out.println("Message key : " + type);
 		//robot.getNode().sendInfo();
+	}
+	
+	public static float convert(float speed, float spin) {
+		final float gamma = 1f;
+		if (speed >= 0) {
+			return speed + (1 - (spin < 0 ? 0 : speed)) * spin * gamma;
+		} else {
+			//return speed * (1 + (spin < 0 ? 2 : 1) * spin * gamma) + spin * gamma;
+			return speed + spin;
+		}
 	}
 	
 	private void handleXboxMovement(Message message){

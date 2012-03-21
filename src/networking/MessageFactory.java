@@ -21,6 +21,7 @@ public class MessageFactory {
 	public static Message createKeyboardMovement(KeyboardMovement movement, String robotName) {
 		Message message = new Message(KeyboardMovement, robotName, Message.ToRobot, Message.FromClient);
 		message.setValue(movement.getType(), "type");
+		message.setValue(movement.getState(), "state");
 		return message;
 	}
 	
