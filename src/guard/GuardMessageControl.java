@@ -19,13 +19,20 @@ public class GuardMessageControl {
 	
 	public void handleMessage(Message message){
 		if (message.getID() == MessageFactory.VehicleUpdate) {
+			lastRadius = message.get(Double.class, "radius");
+			lastAngle = message.get(Double.class, "angle");
+			
 			double x = message.get(Double.class, "posX");
 			double y = message.get(Double.class, "posY");
+			if (points.size() > 0) {
+				Point2D.Double lastPoint = points.get(points.size() - 1);
+				if (lastPoint.getX() == x && lastPoint.getY() == y) {
+					return;
+				}
+			}
 			Point2D.Double newPoint = new Point2D.Double(x, y);
 			points.add(newPoint);
 			currPoint = newPoint;
-			lastRadius = message.get(Double.class, "radius");
-			lastAngle = message.get(Double.class, "angle");
 			if (guard.getControl() != null) {
 				guard.getControl().frame.repaint();
 			}
