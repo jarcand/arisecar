@@ -27,41 +27,31 @@ public class RobotMessageControl {
 		switch (type) {
 			case KeyboardMovement.Up:
 				forward = state == 1 ? 1 : 0;
-//	        	v.setMotor1(180);
-//	        	v.setMotor2(180);
 				break;
 				
 			case KeyboardMovement.Down:
 				forward = state == 1 ? -1 : 0;
-//	        	v.setMotor1(0);
-//	        	v.setMotor2(0);
 				break;
 				
 			case KeyboardMovement.Left:
 				turnRate = state == 1 ? -1 : 0;
-//	        	v.setMotor1(30);
-//	        	v.setMotor2(150);
 				break;
 				
 			case KeyboardMovement.Right:
 				turnRate = state == 1 ? 1 : 0;
-//	        	v.setMotor1(150);
-//	        	v.setMotor2(30);
 				break;
 				
 			case KeyboardMovement.None:
 				forward = 0;
 				turnRate = 0;
-//	        	v.setMotor1(90);
-//	        	v.setMotor2(90);
 				break;
 				
 			default:
 				break;
 		}
 		
-		int leftMotor = Math.round((convert(forward, turnRate) + 1) * 90);
-		int rightMotor = Math.round((convert(forward, -turnRate) + 1) * 90);
+		int leftMotor = Math.round((convert(forward, turnRate / 2) + 1) * 90);
+		int rightMotor = Math.round((convert(forward, -turnRate / 2) + 1) * 90);
 		
 		v.setMotor1(leftMotor);
 		v.setMotor2(rightMotor);
