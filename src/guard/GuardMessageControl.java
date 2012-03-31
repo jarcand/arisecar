@@ -32,8 +32,8 @@ public class GuardMessageControl {
 			Point2D.Double newPoint = new Point2D.Double(x, y);
 			points.add(newPoint);
 			currPoint = newPoint;
-			if (guard.getControl() != null) {
-				guard.getControl().frame.repaint();
+			if (guard.getGUI() != null) {
+				guard.getGUI().frame.repaint();
 			}
 		}
 	}

@@ -12,7 +12,7 @@ import javax.swing.JFrame;
 import networking.KeyboardMovement;
 
 
-public class GuardControl {
+public class GuardGUI {
 	
 	private int offsetX = 300;
 	private int offsetY = 300;
@@ -20,7 +20,7 @@ public class GuardControl {
 	public final JFrame frame;
 	private final Guard guard;
 	
-	public GuardControl(Guard guard){
+	public GuardGUI(Guard guard){
 		this.guard = guard;
 		
 		frame = new JFrame("GuardControl") {

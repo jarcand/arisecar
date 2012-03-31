@@ -6,12 +6,12 @@ public class Guard {
 	
 	private final GuardClient client;
 	private final GuardMessageControl messageControl;
-	private final GuardControl control;
+	private final GuardGUI gui;
 	
 	public Guard(){
 		client = new GuardClient(this);
 		messageControl = new GuardMessageControl(this);
-		control = new GuardControl(this);
+		gui = new GuardGUI(this);
 	}
 	
 	public GuardClient getClient(){
@@ -22,8 +22,8 @@ public class Guard {
 		return messageControl;
 	}
 	
-	public GuardControl getControl(){
-		return control;
+	public GuardGUI getGUI(){
+		return gui;
 	}
 	
 	public static void main(String [] args){
