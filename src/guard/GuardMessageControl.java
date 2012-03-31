@@ -35,6 +35,10 @@ public class GuardMessageControl {
 			if (guard.getGUI() != null) {
 				guard.getGUI().frame.repaint();
 			}
+		} else if (message.getID() == Message.Type.MV_UPDATE) {
+			if (guard.getGUI() != null) {
+				guard.getGUI().updateZones(message);
+			}
 		}
 	}
 

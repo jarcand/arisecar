@@ -1,5 +1,6 @@
 package networking;
 
+import robot.MVClient;
 import robot.VehicleModel;
 
 public class MessageFactory {
@@ -18,6 +19,15 @@ public class MessageFactory {
 		message.setValue(movement.getType(), "type");
 		message.setValue(movement.getState(), "state");
 		return message;
+	}
+	
+	public static Message createMVUpdate(String robotName, MVClient mv) {
+		Message msg = new Message(Message.Type.MV_UPDATE, robotName, Message.ToClient, Message.FromRobot);
+		msg.setValue(mv.isDownZoneClear(), "down");
+		msg.setValue(mv.isUpZoneClear(), "up");
+		msg.setValue(mv.isLeftZoneClear(), "left");
+		msg.setValue(mv.isRightZoneClear(), "right");
+		return msg;
 	}
 	
 	public static Message createVehicleUpdate(String robotName, VehicleModel v) {

@@ -1,6 +1,7 @@
 package guard;
 
 import java.awt.BasicStroke;
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -9,7 +10,9 @@ import java.awt.event.KeyListener;
 import java.awt.geom.Point2D;
 
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import networking.KeyboardMovement;
+import networking.Message;
 
 
 public class GuardGUI {
@@ -19,6 +22,9 @@ public class GuardGUI {
 	
 	public final JFrame frame;
 	private final Guard guard;
+	
+	private JLabel zones;
+	private JLabel instructions;
 	
 	public GuardGUI(Guard guard){
 		this.guard = guard;
@@ -36,7 +42,41 @@ public class GuardGUI {
 		frame.addKeyListener(new KeyboardControl());
 		
 		frame.setSize(1600, 800);
+		
+		zones = new JLabel("nothing");
+		frame.getContentPane().add(zones, BorderLayout.NORTH);
+		
+		instructions = new JLabel("nothing");
+		frame.getContentPane().add(instructions, BorderLayout.SOUTH);
+		
 		frame.setVisible(true);
+	}
+	
+	public void updateZones(Message msg) {
+		boolean downZoneClear = msg.get(Boolean.class, "down");
+		boolean upZoneClear = msg.get(Boolean.class, "up");
+		boolean leftZoneClear = msg.get(Boolean.class, "left");
+		boolean rightZoneClear = msg.get(Boolean.class, "right");
+		
+		zones.setText("down: " + downZoneClear + ", up: " + upZoneClear + ", left: "
+		  + leftZoneClear + ", right: " + rightZoneClear);
+		
+		String instr = "none";
+		if (!downZoneClear) {
+			instr = "STOP";
+		} else {
+			if (!leftZoneClear) {
+				instr = "move right";
+			} else if (!rightZoneClear) {
+				instr = "move left";
+			} else {
+				instr = "forward";
+			}
+			if (!upZoneClear) {
+				instr += ", SLOWLY";
+			}
+		}
+		instructions.setText(instr);
 	}
 	
 	private class KeyboardControl implements KeyListener {
