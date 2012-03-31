@@ -13,7 +13,6 @@ import javax.swing.JLabel;
 import networking.KeyboardMovement;
 import networking.Message;
 import networking.XboxMovement;
-import xbox.XboxController;
 
 public class GuardGUI {
 	

@@ -13,8 +13,6 @@ import ca.ariselab.lib.serialdevices.SerialDeviceID;
 import ca.ariselab.lib.serialdevices.SerialDeviceInitException;
 import ca.ariselab.lib.serialdevices.SerialModule;
 import ca.ariselab.lib.serialdevices.SerialPortMgmt;
-//import ca.ariselab.utils.BuffAvg;
-//import ca.ariselab.utils.Format;
 
 
 public abstract class LocoArduino extends SerialModule {

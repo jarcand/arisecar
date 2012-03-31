@@ -1,7 +1,6 @@
 package server;
 
 import networking.Message;
-
 import com.lloseng.ocsf.server.AbstractServer;
 import com.lloseng.ocsf.server.ConnectionToClient;
 

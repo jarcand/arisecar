@@ -1,4 +1,4 @@
-package xbox;
+package guard;
 
 import net.java.games.input.Component;
 import net.java.games.input.Component.Identifier.Axis;
