@@ -1,6 +1,7 @@
 package robot;
 
 import java.io.IOException;
+import java.net.UnknownHostException;
 import networking.Message;
 import networking.MessageFactory;
 import ca.ariselab.utils.LoopingThread;
@@ -9,14 +10,29 @@ import com.lloseng.ocsf.client.AbstractClient;
 
 public class RobotClient extends AbstractClient {
 	
-	private final String name;
-	private final RobotMessageControl msgCtrl;
-	private final VehicleModel v;
+	private static final String MV_HOST = "localhost";
+	private static final int MV_PORT = 1234;
 	
-	public RobotClient(String host, int port, String robot){
+	private String name;
+	private RobotMessageControl msgCtrl;
+	private VehicleModel v;
+	private MVClient mv;
+	
+	public RobotClient(String host, int port, String robot, String mvHost) {
 		super(host, port);
 		name = robot;
 		v = new VehicleModel();
+		try {
+	        mv = new MVClient(mvHost, MV_PORT);
+        } catch (UnknownHostException e1) {
+        	System.err.println("ERROR: Could not find MV server.");
+	        e1.printStackTrace();
+	        System.exit(1);
+        } catch (IOException e1) {
+        	System.err.println("ERROR: Could not connect to to MV server.");
+	        e1.printStackTrace();
+	        System.exit(2);
+        }
 		msgCtrl = new RobotMessageControl(v);
 		
 		System.out.println("- Client establishing connection with " + host + ":" + port);
@@ -29,9 +45,9 @@ public class RobotClient extends AbstractClient {
 		(new LoopingThread("robot updates", 0, 100) {
             protected void mainLoop() {
             	v.update();
-            	Message message = MessageFactory.createVehicleUpdate(getName(), v);
             	try {
-	                sendToServer(message);
+            		sendToServer(MessageFactory.createVehicleUpdate(getName(), v));
+        			sendToServer(MessageFactory.createMVUpdate(getName(), mv));
                 } catch (IOException e) {
 	                e.printStackTrace();
                 }
@@ -89,6 +105,10 @@ public class RobotClient extends AbstractClient {
 	}
 
 	public static void main(String[] args) {
-		new RobotClient("localhost", 5555, "Gudra");
+		String mvHost = MV_HOST;
+		if (args.length > 0) {
+			mvHost = args[0];
+		}
+		new RobotClient("localhost", 5555, "Gudra", mvHost);
 	}
 }
