@@ -9,8 +9,11 @@ import java.awt.event.KeyListener;
 import java.awt.geom.Point2D;
 
 import javax.swing.JFrame;
-import networking.KeyboardMovement;
 
+import networking.KeyboardMovement;
+import networking.XboxMovement;
+import xbox.XboxController;
+import util.Math2;
 
 public class GuardControl {
 	
@@ -19,6 +22,10 @@ public class GuardControl {
 	
 	public final JFrame frame;
 	private final Guard guard;
+	
+	private boolean controllerEnabled = false;
+	private boolean controllerExists = false;
+
 	
 	public GuardControl(Guard guard){
 		this.guard = guard;
@@ -37,6 +44,55 @@ public class GuardControl {
 		
 		frame.setSize(1600, 800);
 		frame.setVisible(true);
+		
+		try{
+		XboxControl xboxListener = new XboxControl();
+		xboxListener.start();
+		controllerExists = true;
+		
+		} catch(Exception e)
+		{
+			controllerExists = false;
+		}
+	}
+	
+	private class XboxControl extends Thread
+	{
+		XboxController controller = new XboxController();
+
+		public void run()
+		{
+				while(true)
+				{
+					controller.poll();
+					if(!controllerEnabled)
+						if(controller.start.getPollData() == 1)
+							controllerEnabled = true;
+					
+					if(controllerEnabled)
+					{
+						controller.poll();
+						float leftAnalog = controller.leftXAxis.getPollData();
+						float rightAnalog = controller.rightYAxis.getPollData();
+						
+						if(leftAnalog < 0.25 && leftAnalog > -0.25)
+							leftAnalog = 0;
+						if(rightAnalog < 0.25 && rightAnalog > -0.25)
+							rightAnalog = 0;
+						XboxMovement message = new XboxMovement(leftAnalog, rightAnalog);
+						guard.getClient().sendToRobot(message, Guard.DefaultName);
+
+						
+						try {
+							Thread.sleep(50);
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+				
+				}
+			}
+		}
 	}
 	
 	private class KeyboardControl implements KeyListener {
@@ -92,7 +148,8 @@ public class GuardControl {
 					KeyboardMovement message = new KeyboardMovement(KeyboardMovement.Right, KeyboardMovement.PRESS);
 					guard.getClient().sendToRobot(message, Guard.DefaultName);
 				}
-			} else {
+			} 
+			else {
 				System.out.println("other key");
 				setAllFalse();
 				//Create message right and send it

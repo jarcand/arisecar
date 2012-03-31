@@ -4,6 +4,7 @@ import java.io.IOException;
 import networking.KeyboardMovement;
 import networking.Message;
 import networking.MessageFactory;
+import networking.XboxMovement;
 
 import com.lloseng.ocsf.client.AbstractClient;
 
@@ -33,6 +34,11 @@ public class GuardClient extends AbstractClient {
 	
 	public void sendToRobot(KeyboardMovement msg, String robotName){
 		Message message = MessageFactory.createKeyboardMovement(msg, robotName);
+		sendToServer(message);
+	}
+	
+	public void sendToRobot(XboxMovement msg, String robotName){
+		Message message = MessageFactory.createXboxMovement(msg, robotName);
 		sendToServer(message);
 	}
 

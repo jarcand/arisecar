@@ -11,6 +11,9 @@ public class KeyboardMovement {
 	public static final int PRESS = 1;
 	public static final int RELEASE = 2;
 	
+
+	
+	
 	private final int type;
 	private final int state;
 	
@@ -26,4 +29,6 @@ public class KeyboardMovement {
 	public int getState() {
 		return state;
 	}
+	
+
 }

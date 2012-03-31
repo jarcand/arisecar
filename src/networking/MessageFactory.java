@@ -11,10 +11,8 @@ public class MessageFactory {
 
 	public static Message createXboxMovement(XboxMovement movement, String robotName){
 		Message message = new Message(XboxMovement, robotName, Message.ToRobot, Message.FromClient);
-		message.setValue(movement.getX(), "x");
-		message.setValue(movement.getY(), "y");
-		message.setValue(movement.getZ(), "z");
-		message.setValue(movement.getRX(), "rx");
+		message.setValue(movement.getLeftAnalog(), "x");
+		message.setValue(movement.getRightAnalog(), "y");
 		return message;
 	}
 	
