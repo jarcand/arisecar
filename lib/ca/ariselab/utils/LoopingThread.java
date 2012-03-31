@@ -32,13 +32,12 @@ public abstract class LoopingThread extends Thread {
 	 * Start the main looping method.
 	 */
 	public final void run() {
-		if (startDelay > loopDelay) {
-			try {
-				Thread.sleep(startDelay - loopDelay);
-			} catch (InterruptedException e) {
-			}
+		try {
+			Thread.sleep(startDelay);
+		} catch (InterruptedException e) {
 		}
 		running = true;
+		mainLoop();
 		while (running) {
 			try {
 				Thread.sleep(loopDelay);
