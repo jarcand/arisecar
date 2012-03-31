@@ -2,32 +2,22 @@ package networking;
 
 public class XboxMovement {
 
-	private double z;
-	private double x;
-	private double y;
-	private double rx;
-	
-	public XboxMovement(double x, double y, double z, double rx){
-		this.x = x;
-		this.y = y;
-		this.z = z;
-		this.rx = rx;
+private float leftAnalog;
+private float rightAnalog;
+
+	public XboxMovement(float leftAnalog, float rightAnalog)
+	{
+		this.leftAnalog = leftAnalog;
+		this.rightAnalog = rightAnalog;
 	}
 	
-	public double getX(){
-		return x;
+	public float getLeftAnalog()
+	{
+		return leftAnalog;
 	}
-	
-	public double getZ(){
-		return z;
-	}
-	
-	public double getY(){
-		return y;
-	}
-	
-	public double getRX(){
-		return rx;
+	public float getRightAnalog()
+	{
+		return rightAnalog;
 	}
 
 }

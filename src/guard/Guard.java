@@ -8,6 +8,7 @@ public class Guard {
 	private final GuardMessageControl messageControl;
 	private final GuardGUI gui;
 	
+	
 	public Guard(){
 		client = new GuardClient(this);
 		messageControl = new GuardMessageControl(this);

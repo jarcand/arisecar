@@ -8,12 +8,12 @@ import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.geom.Point2D;
-
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import networking.KeyboardMovement;
 import networking.Message;
-
+import networking.XboxMovement;
+import xbox.XboxController;
 
 public class GuardGUI {
 	
@@ -23,10 +23,13 @@ public class GuardGUI {
 	public final JFrame frame;
 	private final Guard guard;
 	
+	private boolean controllerEnabled = false;
+	private boolean controllerExists = false;
+	
 	private JLabel zones;
 	private JLabel instructions;
 	
-	public GuardGUI(Guard guard){
+	public GuardGUI(Guard guard) {
 		this.guard = guard;
 		
 		frame = new JFrame("GuardControl") {
@@ -50,6 +53,55 @@ public class GuardGUI {
 		frame.getContentPane().add(instructions, BorderLayout.SOUTH);
 		
 		frame.setVisible(true);
+		
+		try{
+		XboxControl xboxListener = new XboxControl();
+		xboxListener.start();
+		controllerExists = true;
+		
+		} catch(Exception e)
+		{
+			controllerExists = false;
+		}
+	}
+	
+	private class XboxControl extends Thread
+	{
+		XboxController controller = new XboxController();
+
+		public void run()
+		{
+				while(true)
+				{
+					controller.poll();
+					if(!controllerEnabled)
+						if(controller.start.getPollData() == 1)
+							controllerEnabled = true;
+					
+					if(controllerEnabled)
+					{
+						controller.poll();
+						float leftAnalog = controller.leftXAxis.getPollData();
+						float rightAnalog = controller.rightYAxis.getPollData();
+						
+						if(leftAnalog < 0.25 && leftAnalog > -0.25)
+							leftAnalog = 0;
+						if(rightAnalog < 0.25 && rightAnalog > -0.25)
+							rightAnalog = 0;
+						XboxMovement message = new XboxMovement(leftAnalog, rightAnalog);
+						guard.getClient().sendToRobot(message, Guard.DefaultName);
+
+						
+						try {
+							Thread.sleep(50);
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+				
+				}
+			}
+		}
 	}
 	
 	public void updateZones(Message msg) {
@@ -132,7 +184,8 @@ public class GuardGUI {
 					KeyboardMovement message = new KeyboardMovement(KeyboardMovement.Right, KeyboardMovement.PRESS);
 					guard.getClient().sendToRobot(message, Guard.DefaultName);
 				}
-			} else {
+			} 
+			else {
 				System.out.println("other key");
 				setAllFalse();
 				//Create message right and send it
