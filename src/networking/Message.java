@@ -6,9 +6,6 @@ import java.util.Map.Entry;
 
 public class Message implements Serializable{
 	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -6242001330568255693L;
 	
 	public static final int ToClient = 0;
@@ -18,13 +15,13 @@ public class Message implements Serializable{
 	public static final int FromClient = 0;
 	public static final int FromRobot = 1;
 
-	private final int ID;
+	private final Type ID;
 	private final int destination;
 	private final int source;
 	private final String robotName;
 	protected final HashMap<String, Object> map;
 	
-	public Message(int ID, String robotName, int destination, int source){
+	public Message(Type ID, String robotName, int destination, int source){
 		this.ID = ID;
 		this.robotName = robotName;
 		this.destination = destination;
@@ -32,7 +29,7 @@ public class Message implements Serializable{
 		map = new HashMap<String, Object>();
 	}
 	
-	public int getID(){
+	public Type getID(){
 		return ID;
 	}
 	
@@ -75,4 +72,7 @@ public class Message implements Serializable{
 		return sb.append(")").toString();
 	}
 
+	public enum Type {
+		UNKNOWN, XBOX_MOVEMENT, KEYBOARD_MOVEMENT, VEHICLE_UPDATE, MV_UPDATE
+	}
 }

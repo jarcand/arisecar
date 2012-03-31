@@ -2,7 +2,6 @@ package robot;
 
 import networking.KeyboardMovement;
 import networking.Message;
-import networking.MessageFactory;
 
 public class RobotMessageControl {
 	
@@ -15,9 +14,9 @@ public class RobotMessageControl {
 	}
 	
 	public void handleMessage(Message message) {
-		if (message.getID() == MessageFactory.XboxMovement) {
+		if (message.getID() == Message.Type.XBOX_MOVEMENT) {
 			handleXboxMovement(message);
-		} else if (message.getID() == MessageFactory.KeyboardMovement) {
+		} else if (message.getID() == Message.Type.KEYBOARD_MOVEMENT) {
 			handleKeyboardMovement(message);
 		}
 	}

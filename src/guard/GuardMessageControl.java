@@ -3,7 +3,6 @@ package guard;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import networking.Message;
-import networking.MessageFactory;
 
 public class GuardMessageControl {
 	
@@ -18,7 +17,7 @@ public class GuardMessageControl {
 	}
 	
 	public void handleMessage(Message message){
-		if (message.getID() == MessageFactory.VehicleUpdate) {
+		if (message.getID() == Message.Type.VEHICLE_UPDATE) {
 			lastRadius = message.get(Double.class, "radius");
 			lastAngle = message.get(Double.class, "angle");
 			
