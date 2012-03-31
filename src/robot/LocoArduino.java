@@ -19,11 +19,14 @@ import ca.ariselab.lib.serialdevices.SerialPortMgmt;
 
 public abstract class LocoArduino extends SerialModule {
 	
+	private class Inputs {
+		int motor1Target, motor2Target, motor1SetPoint, motor2SetPoint;
+		int rangeFinder1, rangeFinder2, rangeFinder3;
+	}
 	private String friendlyID;
 	private int ardID;
-	private int motor1Out, motor2Out, motor1Target, motor2Target, motor1SetPoint, motor2SetPoint;
-	private int rangeFinder1, rangeFinder2, rangeFinder3;
-//	private BuffAvg thermometer1buff;
+	private int motor1Out = 90, motor2Out = 90;
+	private Inputs inputs = new Inputs();
 	
 	// Constructors ========================================================
 	
@@ -35,9 +38,6 @@ public abstract class LocoArduino extends SerialModule {
 		begin(20, 200);
 		friendlyID = devID.toString();
 		ardID = devID.toByte();
-		motor1Out = 90;
-		motor2Out = 90;
-//		thermometer1buff = new BuffAvg(100);
 	}
 	
 	// Arduino communication ===============================================
@@ -78,19 +78,25 @@ public abstract class LocoArduino extends SerialModule {
 			return;
 		}
 		
-		motor1Target = readByte();
-		motor2Target = readByte();
-		motor1SetPoint = readShort();
-		motor2SetPoint = readShort();
-		rangeFinder1 = readShort();
-		rangeFinder2 = readShort();
-		rangeFinder3 = readShort();
+		Inputs newData = new Inputs();
+		newData.motor1Target = readByte();
+		newData.motor2Target = readByte();
+		newData.motor1SetPoint = readShort();
+		newData.motor2SetPoint = readShort();
+		newData.rangeFinder1 = readShort();
+		newData.rangeFinder2 = readShort();
+		newData.rangeFinder3 = readShort();
 		
+		boolean err = false;
 		for (int i = 0; i < 16; i++) {
 			char c = (char) readByte();
 			if (c != '.') {
 				System.err.println("Invalid char: " + (int) c);
+				err = true;
 			}
+		}
+		if (!err) {
+			inputs = newData;
 		}
 		
 		inputsUpdated();
@@ -108,7 +114,7 @@ public abstract class LocoArduino extends SerialModule {
 	 * @return The desired servo position of the ESC controlling the motor.
 	 */
 	public int getMotor1Target() {
-		return motor1Target;
+		return inputs.motor1Target;
 	}
 
 	/**
@@ -116,7 +122,7 @@ public abstract class LocoArduino extends SerialModule {
 	 * @return The desired servo position of the ESC controlling the motor.
 	 */
 	public int getMotor2Target() {
-		return motor2Target;
+		return inputs.motor2Target;
 	}
 
 	/**
@@ -124,7 +130,7 @@ public abstract class LocoArduino extends SerialModule {
 	 * @return The actual pulse length of the ESC controlling the motor.
 	 */
 	public int getMotor1SetPoint() {
-		return motor1SetPoint;
+		return inputs.motor1SetPoint;
 	}
 
 	/**
@@ -132,7 +138,7 @@ public abstract class LocoArduino extends SerialModule {
 	 * @return The actual pulse length of the ESC controlling the motor.
 	 */
 	public int getMotor2SetPoint() {
-		return motor2SetPoint;
+		return inputs.motor2SetPoint;
 	}
 
 	/**
@@ -151,7 +157,7 @@ public abstract class LocoArduino extends SerialModule {
 	 * @return The reading in centimetres.
 	 */
 	public float getRangeFinder1() {
-		return rangeFinder1;
+		return inputs.rangeFinder1;
 	}
 
 	/**
@@ -160,7 +166,7 @@ public abstract class LocoArduino extends SerialModule {
 	 * @return The reading in centimetres.
 	 */
 	public float getRangeFinder2() {
-		return rangeFinder2;
+		return inputs.rangeFinder2;
 	}
 
 	/**
@@ -169,7 +175,7 @@ public abstract class LocoArduino extends SerialModule {
 	 * @return The reading in centimetres.
 	 */
 	public float getRangeFinder3() {
-		return rangeFinder3;
+		return inputs.rangeFinder3;
 	}
 
 	/**
@@ -177,7 +183,7 @@ public abstract class LocoArduino extends SerialModule {
 	 * @param motor1 The servo position of the ESC controlling the motor.
 	 */
 	public void setMotor1(int motor1) {
-		this.motor1Out = motor1;
+		motor1Out = motor1;
 	}
 
 	/**
@@ -185,7 +191,7 @@ public abstract class LocoArduino extends SerialModule {
 	 * @param motor2 The servo position of the ESC controlling the motor.
 	 */
 	public void setMotor2(int motor2) {
-		this.motor2Out = motor2;
+		motor2Out = motor2;
 	}
 
 	// Development / Debug =================================================
