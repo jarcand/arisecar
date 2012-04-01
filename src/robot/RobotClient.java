@@ -19,6 +19,7 @@ public class RobotClient extends AbstractClient {
 	private VehicleModel v;
 	private MVClient mv;
 	public boolean mvOn = true;
+	private final AutonomousControl ac;
 	
 	public RobotClient(String host, int port, String robot, String mvHost) {
 		super(host, port);
@@ -36,6 +37,7 @@ public class RobotClient extends AbstractClient {
 	        System.exit(2);
         }
 		msgCtrl = new RobotMessageControl(v);
+		ac = new AutonomousControl(v, mv);
 		
 		System.out.println("- Client establishing connection with " + host + ":" + port);
 		try {
@@ -52,159 +54,10 @@ public class RobotClient extends AbstractClient {
         			sendToServer(MessageFactory.createMVUpdate(getName(), mv));
         			
         			if (v.isNotDeadman()) {
-	        			float forward = 0;
-	        			float turnRate = 0;
-	        			
-	        			if(!mv.isLeftZoneClear() && !mv.isUpZoneClear() && mv.isDownZoneClear() && mv.isRightZoneClear())
-	        			{
-	        				forward = 0.3f;
-	        				turnRate = 0.3f;
-	        			}
-	        			else if(mv.isLeftZoneClear() && !mv.isUpZoneClear() && mv.isDownZoneClear() && !mv.isRightZoneClear())
-	        			{
-	        				forward = 0.3f;
-	        				turnRate = -0.3f;
-	        			}
-	        			else if (!mv.isUpZoneClear() && mv.isLeftZoneClear() && mv.isRightZoneClear() && mv.isDownZoneClear())
-	        			{
-	        				forward = 0.3f;
-	        				turnRate = 0;
-	        			}
-	        			else if (!mv.isRightZoneClear() && !mv.isLeftZoneClear() && mv.isDownZoneClear() && mv.isUpZoneClear())
-	        			{
-	        				forward = 0.3f;
-	        				turnRate = 0;
-	        			}
-	        			else if(!mv.isRightZoneClear() && !mv.isDownZoneClear() && mv.isLeftZoneClear() && mv.isUpZoneClear())
-	        			{
-	        				forward = 0;
-	        				turnRate = -0.3f;
-	        			}
-	        			else if(mv.isRightZoneClear() && !mv.isDownZoneClear() && !mv.isLeftZoneClear() && mv.isUpZoneClear())
-	        			{
-	        				forward = 0;
-	        				turnRate = 0.3f;
-	        			}
-	        			else if(!mv.isDownZoneClear() && mv.isLeftZoneClear() && mv.isRightZoneClear() && mv.isUpZoneClear())
-	        			{
-	        				forward = 0;
-	        				turnRate = 0;
-	        			}
-	        			else if(mv.isDownZoneClear() && mv.isLeftZoneClear() && mv.isRightZoneClear() && mv.isUpZoneClear())
-	        			{
-	        				forward = 0.4f;
-	        				turnRate = 0;
-	        			}
-	        			else if (!mv.isDownZoneClear() && !mv.isLeftZoneClear() && !mv.isRightZoneClear() && !mv.isUpZoneClear())
-	        			{
-	        				forward = 0;
-	        				turnRate = 0.2f;
-	        			}
-	        			else if (mv.isDownZoneClear() && !mv.isUpZoneClear() && !mv.isLeftZoneClear() && !mv.isRightZoneClear())
-	        			{
-	        				forward = 0.2f;
-	        				turnRate = 0;
-	        			}
-	        			else
-	        			{
-	        				forward = 0;
-	        				turnRate = 0.2f;
-	        			}
-	        			
-	        			/*
-	        			if(!mv.isDownZoneClear())
-	        			{
-	        				if(!mv.isLeftZoneClear() && !mv.isRightZoneClear() )
-	        				{
-	        					forward = 0;
-	        					turnRate = 0;
-	        				}
-	        				else
-	        				{
-	        					if(!mv.isLeftZoneClear())
-	        					{
-	        						forward = 0;
-	        					    turnRate = 0.3f;
-	        					}
-	        					else if(!mv.isRightZoneClear())
-	        					{
-	        						forward = 0;
-	        						turnRate = -0.3f;
-	        					}
-	        				}
-
-	        			}
-	        			else if(!mv.isUpZoneClear())
-	        			{
-	        				if(mv.isDownZoneClear())
-	        				{
-	        					if(!mv.isLeftZoneClear() && !mv.isRightZoneClear())
-	        					{
-	        						forward = 0.3f;
-			        				turnRate = 0;
-	        					}
-	        					else if(mv.isLeftZoneClear() && mv.isRightZoneClear())
-	        					{
-	        						forward = 0.3f;
-	        						turnRate = 0;
-	        					}
-	        					else if(mv.isRightZoneClear())
-	        					{
-	        						forward = 0.3f;
-	        						turnRate = 0.3f;
-	        					}
-	        					else if(mv.isLeftZoneClear())
-	        					{
-	        						forward = 0.3f;
-	        						turnRate = -0.3f;
-	        					}
-		        			}
-	        				else if(!mv.isDownZoneClear())
-	        				{
-	        					if(!mv.isLeftZoneClear() && !mv.isRightZoneClear())
-	        					{
-	        						forward = 0;
-	        						turnRate = 0;
-	        					}
-	        					else if(mv.isLeftZoneClear())
-	        					{
-	        						forward = 0;
-	        						turnRate = -0.3f;
-	        					}
-	        					else if(mv.isRightZoneClear())
-	        					{
-	        						forward = 0;
-	        						turnRate = 0.3f;
-	        					}
-	        				}
-	        				
-	        			}
-	        			else
-        				{
-        					forward = 0.3f;
-        					turnRate = 0;
-        				}*/
-	        			
-	        			
-	        			/*if(!mv.isDownZoneClear()){
-	        				turnRate = 0;
-	        				System.out.println("Bottom don't move");
-	        			}else if(!mv.isLeftZoneClear() && !mv.isRightZoneClear()){
-	        				turnRate = 0;
-	        				System.out.println("Can't move");
-	        			}else if(!mv.isLeftZoneClear()){
-	        				turnRate = 0.3f;
-	        				System.out.println("In left zone");
-	        			}else if(!mv.isRightZoneClear()){
-	        				turnRate = -0.3f;
-	        				System.out.println("In right zone");
-	        			}*/
-	        			
-	        			int leftMotor = Math.round((RobotMessageControl.convert(forward, turnRate / 2.0f) + 1) * 90);
-	        			int rightMotor = Math.round((RobotMessageControl.convert(forward, -turnRate / 2.0f) + 1) * 90);
-	        			
-	        			v.setLeftMotor(leftMotor);
-	        			v.setRightMotor(rightMotor);
+        				boolean success = ac.update();
+        				if (!success) {
+        					System.err.println("Autonomous control is broken.");
+        				}
         			} else {
         				v.setLeftMotor(90);
         				v.setRightMotor(90);
@@ -253,12 +106,12 @@ public class RobotClient extends AbstractClient {
 	 * Hook method called each time an exception is thrown by the
 	 * client's thread that is waiting for messages from the server.
 	 *
-	 * @param exception the exception raised.
+	 * @param e the exception raised.
 	 */
 	@Override
-	protected void connectionException(Exception exception){
+	protected void connectionException(Exception e){
 		System.out.println("problem with connection");
-		exception.printStackTrace();
+		e.printStackTrace();
 	}
 
 	/**
