@@ -17,6 +17,7 @@ public class RobotClient extends AbstractClient {
 	private RobotMessageControl msgCtrl;
 	private VehicleModel v;
 	private MVClient mv;
+	public boolean mvOn = false;
 	
 	public RobotClient(String host, int port, String robot, String mvHost) {
 		super(host, port);
@@ -48,24 +49,27 @@ public class RobotClient extends AbstractClient {
             	try {
             		sendToServer(MessageFactory.createVehicleUpdate(getName(), v));
         			sendToServer(MessageFactory.createMVUpdate(getName(), mv));
-        			int forward = 0;
-        			int turnRate = 0;
         			
-        			if(!mv.isLeftZoneClear()){
-        				turnRate = 1;
+        			if (mvOn) {
+	        			float forward = 0;
+	        			float turnRate = 0;
+	        			
+	        			if(!mv.isLeftZoneClear()){
+	        				turnRate = 0.3f;
+	        			}
+	        			if(!mv.isRightZoneClear()){
+	        				turnRate = -0.3f;
+	        			}
+	        			if(!mv.isLeftZoneClear() && !mv.isRightZoneClear()){
+	        				turnRate = 0;
+	        				System.out.println("Can't move");
+	        			}
+	        			int leftMotor = Math.round((RobotMessageControl.convert(forward, turnRate / 2.0f) + 1) * 30);
+	        			int rightMotor = Math.round((RobotMessageControl.convert(forward, -turnRate / 2.0f) + 1) * 30);
+	        			
+	        			v.setMotor1(leftMotor);
+	        			v.setMotor2(rightMotor);
         			}
-        			if(!mv.isRightZoneClear()){
-        				turnRate = -1;
-        			}
-        			if(!mv.isLeftZoneClear() && !mv.isRightZoneClear()){
-        				turnRate = 0;
-        				System.out.println("Can't move");
-        			}
-        			int leftMotor = Math.round((RobotMessageControl.convert(forward, turnRate / 2.0f) + 1) * 30);
-        			int rightMotor = Math.round((RobotMessageControl.convert(forward, -turnRate / 2.0f) + 1) * 30);
-        			
-        			v.setMotor1(leftMotor);
-        			v.setMotor2(rightMotor);
                 } catch (IOException e) {
 	                e.printStackTrace();
                 }
@@ -88,7 +92,11 @@ public class RobotClient extends AbstractClient {
 			Message message = (Message)msg;
 			if(message.isToRobot()){
 				if(message.getRobotName().equals(getName())){
-					msgCtrl.handleMessage(message);
+					if (message.getID() == Message.Type.MV_INSTR) {
+						mvOn = message.get(Boolean.class, "on");
+					} else {
+						msgCtrl.handleMessage(message);
+					}
 				}
 			}
 		}

@@ -19,6 +19,12 @@ public class MessageFactory {
 		return message;
 	}
 	
+	public static Message createMVInstruction(String robotName, boolean mvOn) {
+		Message msg = new Message(Message.Type.MV_INSTR, robotName, Message.ToClient, Message.FromRobot);
+		msg.setValue(mvOn, "on");
+		return msg;
+	}
+	
 	public static Message createMVUpdate(String robotName, MVClient mv) {
 		Message msg = new Message(Message.Type.MV_UPDATE, robotName, Message.ToClient, Message.FromRobot);
 		msg.setValue(mv.isDownZoneClear(), "down");
