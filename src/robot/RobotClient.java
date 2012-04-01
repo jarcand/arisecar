@@ -8,10 +8,17 @@ import networking.MessageFactory;
 import ca.ariselab.utils.LoopingThread;
 import com.lloseng.ocsf.client.AbstractClient;
 
-
+/**
+ * The main program for the robot, including the networking client that connects
+ * to the host server.
+ * @author Jeffrey Arcand <jeffrey.arcand@ariselab.ca>
+ */
 public class RobotClient extends AbstractClient {
 	
+	/** The default host of the Machine Vision server. */
 	private static final String MV_HOST = "localhost";
+	
+	/** The default port of the Machine Vision server. */
 	private static final int MV_PORT = 1234;
 	
 	private String name;
@@ -28,35 +35,33 @@ public class RobotClient extends AbstractClient {
 		try {
 	        mv = new MVClient(mvHost, MV_PORT);
         } catch (UnknownHostException e1) {
-        	System.err.println("ERROR: Could not find MV server.");
-	        e1.printStackTrace();
-	        System.exit(1);
+        	Log.logError("Could not find MV server.");
         } catch (IOException e1) {
-        	System.err.println("ERROR: Could not connect to to MV server.");
-	        e1.printStackTrace();
-	        System.exit(2);
+        	Log.logError("Could not connect to to MV server.");
         }
 		msgCtrl = new RobotMessageControl(v);
 		ac = new AutonomousControl(v, mv);
 		
-		System.out.println("- Client establishing connection with " + host + ":" + port);
+		Log.logInfo("Client establishing connection with " + host + ":" + port);
 		try {
 			openConnection();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		System.out.println("- Connection established");
+		Log.logInfo("Connection established");
 		(new LoopingThread("robot updates", 0, 100) {
             protected void mainLoop() {
 //            	v.updatePosition();
             	try {
             		sendToServer(MessageFactory.createVehicleUpdate(getName(), v));
-        			sendToServer(MessageFactory.createMVUpdate(getName(), mv));
+            		if (mv != null) {
+            			sendToServer(MessageFactory.createMVUpdate(getName(), mv));
+            		}
         			
         			if (v.isNotDeadman()) {
         				boolean success = ac.update();
         				if (!success) {
-        					System.err.println("Autonomous control is broken.");
+        					Log.logError("Autonomous control is broken.");
         				}
         			} else {
         				v.setLeftMotor(90);

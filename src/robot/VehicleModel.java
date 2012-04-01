@@ -41,7 +41,7 @@ public class VehicleModel {
 				}
 			};
 		} catch (SerialDeviceInitException e) {
-			e.printStackTrace();
+			Log.logFatal("Cannot connect to loco arduino.");
 		}
 	}
 	
