@@ -1,5 +1,6 @@
 package guard;
 
+import java.io.FileNotFoundException;
 import net.java.games.input.Component;
 import net.java.games.input.Component.Identifier.Axis;
 import net.java.games.input.Component.Identifier.Button;
@@ -43,7 +44,7 @@ public class XboxController {
 	public Component hat;
 	
 	
-	public XboxController(){
+	public XboxController() throws FileNotFoundException {
 		Controller[] ca = ControllerEnvironment.getDefaultEnvironment().getControllers();
 		for(Controller con : ca){
 			if(con.getName().toLowerCase().contains("xbox")){
@@ -51,6 +52,9 @@ public class XboxController {
 			} else {
 				System.out.println(con.getName());
 			}
+		}
+		if (xbox == null) {
+			throw new FileNotFoundException("Could not find Xbox controller.");
 		}
 		System.out.println(xbox.getName());
 		for(Component com : xbox.getComponents()){
@@ -79,5 +83,4 @@ public class XboxController {
 	public void poll(){
 		xbox.poll();
 	}
-
 }

@@ -8,6 +8,7 @@ import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.geom.Point2D;
+import java.io.FileNotFoundException;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import networking.KeyboardMovement;
@@ -57,17 +58,20 @@ public class GuardGUI {
 	}
 	
 	private class XboxControl extends Thread {
-		XboxController controller = new XboxController();
-		
 		public void run() {
-			while (true) {
+			XboxController controller = null;
+            try {
+	            controller = new XboxController();
+            } catch (FileNotFoundException e1) {
+	            System.err.println(e1);
+            }
+			while (controller != null) {
 				controller.poll();
 				if(!controllerEnabled)
 					if(controller.start.getPollData() == 1)
 						controllerEnabled = true;
 				
 				if (controllerEnabled) {
-					controller.poll();
 					float leftAnalog = controller.leftXAxis.getPollData();
 					float rightAnalog = controller.rightYAxis.getPollData();
 					
