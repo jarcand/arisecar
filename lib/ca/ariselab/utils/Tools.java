@@ -44,9 +44,26 @@ public final class Tools {
 		float aligned = reversed ? -axisInput : axisInput;
 		int ret = Math.round((1 + aligned) / 2 * 180);
 		int gamma = 5;
-		if (90 - gamma < ret && ret < 90 + gamma)
+		if (90 - gamma < ret && ret < 90 + gamma) {
 			ret = 90;
+		}
 		return ret;
+	}
+	
+	/**
+	 * Mix the provided speed/yaw into a motor speed.
+	 * @param speed The speed of the vehicle, +1 is full ahead, -1 is full reverse.
+	 * @param yaw The yaw rate of the vehicle, +1 is full one way, -1 is full opposite way. 
+	 * @return The motor speed, +1 is full ahead, -1 is full reverse.
+	 */
+	public static float mixSpeedYaw(float speed, float yaw) {
+		final float gamma = 1f;
+		if (speed >= 0) {
+			return speed + (1 - (yaw < 0 ? 0 : speed)) * yaw * gamma;
+		} else {
+			//return speed * (1 + (spin < 0 ? 2 : 1) * spin * gamma) + spin * gamma;
+			return speed + yaw;
+		}
 	}
 	
 	/**
