@@ -64,6 +64,9 @@ public class MVClient  {
 					// TODO: NOTE: this assumes the connection remains synchronized, which might not be the case 
 					response = inFromServer.read();
 					
+					// Notify any listeners
+					responseUpdated();
+					
 				// If the socket has a problem, close the connection and end the thread
 				} catch (SocketException e) {
 					System.err.println("Client connection to MV server has died.");
@@ -91,6 +94,9 @@ public class MVClient  {
 			}
 		}).start();
 	}
+	
+	/** A method called when the MV response has been updated */
+	public void responseUpdated() {}
 	
 	/**
 	 * Send a calibration signal/message to the server. 
