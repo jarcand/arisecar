@@ -11,12 +11,23 @@ public class KeyboardMovement {
 	public static final int PRESS = 1;
 	public static final int RELEASE = 2;
 	
-	public final int type;
-	public final int state;
+
+	
+	
+	private final int type;
+	private final int state;
 	
 	public KeyboardMovement(int type, int state) {
 		this.type = type;
 		this.state = state;
+	}
+	
+	public int getType(){
+		return type;
+	}
+
+	public int getState() {
+		return state;
 	}
 	
 

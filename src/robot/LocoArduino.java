@@ -19,7 +19,7 @@ public abstract class LocoArduino extends SerialModule {
 	
 	private class Inputs {
 		int motor1Target, motor2Target, motor1SetPoint, motor2SetPoint;
-		int rangeFinder1, rangeFinder2, rangeFinder3, deadman;
+		int rangeFinder1, rangeFinder2, rangeFinder3;
 	}
 	private String friendlyID;
 	private int ardID;
@@ -84,10 +84,9 @@ public abstract class LocoArduino extends SerialModule {
 		newData.rangeFinder1 = readShort();
 		newData.rangeFinder2 = readShort();
 		newData.rangeFinder3 = readShort();
-		newData.deadman = readShort();
 		
 		boolean err = false;
-		for (int i = 0; i < 14; i++) {
+		for (int i = 0; i < 16; i++) {
 			char c = (char) readByte();
 			if (c != '.') {
 				System.err.println("Invalid char: " + (int) c);
@@ -176,14 +175,6 @@ public abstract class LocoArduino extends SerialModule {
 	public float getRangeFinder3() {
 		return inputs.rangeFinder3;
 	}
-	
-	/**
-	 * Get the latest reading of the deadman switch.
-	 * @return The reading as a RC PWM duty cycle.
-	 */
-	public int getDeadman() {
-		return inputs.deadman;
-	}
 
 	/**
 	 * Set the desired value for motor 1.
@@ -207,8 +198,7 @@ public abstract class LocoArduino extends SerialModule {
 		return "LocoArduino(" + friendlyID + "): "
 		  + getMotor1Target() + " " + getMotor2Target() + " "
 		  + getMotor1SetPoint() + " " + getMotor2SetPoint() + " "
-		  + getRangeFinder1() + " " + getRangeFinder2() + " "
-		  + getRangeFinder3() + " " + getDeadman();
+		  + getRangeFinder1() + " " + getRangeFinder2() + " " + getRangeFinder3();
 	}
 	
 	public static void main(String[] args) {
