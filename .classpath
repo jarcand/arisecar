@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="src" path="lib"/>
+	<classpathentry excluding="jinput_nightly_20100503/" kind="src" path="lib"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="lib/jinput.jar">
+	<classpathentry kind="lib" path="lib/jinput_nightly_20100503/jinput.jar">
 		<attributes>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="AriseCar/lib/native jinput"/>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="arisecar/lib/jinput_nightly_20100503"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="output" path="bin"/>
