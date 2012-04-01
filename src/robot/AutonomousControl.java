@@ -12,8 +12,9 @@ public class AutonomousControl {
 	private static final float STOPPED_TURN_RATE = 0.15f;
 	private static final float MOVING_TURN_RATE = 0.2f;
 	private static final float NO_PASS_TURN_RATE = 0.15f;
-	private static final float MAX_SPEED_CHANGE = 0.1f;
-	private static final float MAX_YAW_CHANGE = 0.1f;
+	
+	private static final float MAX_SPEED_CHANGE = 0.02f;
+	private static final float MAX_YAW_CHANGE = 0.02f;
 	
 	private final VehicleModel v;
 	private final MVClient mv;
