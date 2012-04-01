@@ -14,7 +14,7 @@ public class VehicleUpdate {
 		posX = model.getPosX();
 		posY = model.getPosY();
 		radius = model.getRadius();
-		angle = model.getAngle();
+		angle = model.getHeading();
 	}
 	
 }

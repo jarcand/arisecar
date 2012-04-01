@@ -54,8 +54,8 @@ public class RobotMessageControl {
 		int leftMotor = Math.round((convert(forward, turnRate / 2) + 1) * 90);
 		int rightMotor = Math.round((convert(forward, -turnRate / 2) + 1) * 90);
 		
-		v.setMotor1(leftMotor);
-		v.setMotor2(rightMotor);
+		v.setLeftMotor(leftMotor);
+		v.setRightMotor(rightMotor);
 		
 		//System.out.println("Message key : " + type);
 		//robot.getNode().sendInfo();

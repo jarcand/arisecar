@@ -46,7 +46,7 @@ public class RobotClient extends AbstractClient {
 		System.out.println("- Connection established");
 		(new LoopingThread("robot updates", 0, 100) {
             protected void mainLoop() {
-            	v.update();
+//            	v.updatePosition();
             	try {
             		sendToServer(MessageFactory.createVehicleUpdate(getName(), v));
         			sendToServer(MessageFactory.createMVUpdate(getName(), mv));
@@ -203,11 +203,11 @@ public class RobotClient extends AbstractClient {
 	        			int leftMotor = Math.round((RobotMessageControl.convert(forward, turnRate / 2.0f) + 1) * 90);
 	        			int rightMotor = Math.round((RobotMessageControl.convert(forward, -turnRate / 2.0f) + 1) * 90);
 	        			
-	        			v.setMotor1(leftMotor);
-	        			v.setMotor2(rightMotor);
+	        			v.setLeftMotor(leftMotor);
+	        			v.setRightMotor(rightMotor);
         			} else {
-        				v.setMotor1(90);
-        				v.setMotor2(90);
+        				v.setLeftMotor(90);
+        				v.setRightMotor(90);
         			}
                 } catch (IOException e) {
 	                e.printStackTrace();
