@@ -32,7 +32,7 @@ public class GuardGUI {
 		this.guard = guard;
 		
 		frame = new JFrame("GuardControl") {
-            private static final long serialVersionUID = -9188506391582322204L;
+			private static final long serialVersionUID = -9188506391582322204L;
 			public void paint(Graphics g) {
 				super.paint(g);
 				paintTrail(g);
@@ -54,50 +54,46 @@ public class GuardGUI {
 		frame.setVisible(true);
 		
 		try{
-		XboxControl xboxListener = new XboxControl();
-		xboxListener.start();
-		controllerExists = true;
-		
+			XboxControl xboxListener = new XboxControl();
+			xboxListener.start();
+			controllerExists = true;
+			
 		} catch(Exception e)
 		{
 			controllerExists = false;
 		}
 	}
 	
-	private class XboxControl extends Thread
-	{
+	private class XboxControl extends Thread {
 		XboxController controller = new XboxController();
-
-		public void run()
-		{
-				while(true)
-				{
-					controller.poll();
-					if(!controllerEnabled)
-						if(controller.start.getPollData() == 1)
-							controllerEnabled = true;
-					
-					if(controllerEnabled)
-					{
-						controller.poll();
-						float leftAnalog = controller.leftXAxis.getPollData();
-						float rightAnalog = controller.rightYAxis.getPollData();
-						
-						if(leftAnalog < 0.25 && leftAnalog > -0.25)
-							leftAnalog = 0;
-						if(rightAnalog < 0.25 && rightAnalog > -0.25)
-							rightAnalog = 0;
-						XboxMovement message = new XboxMovement(leftAnalog, rightAnalog);
-						guard.getClient().sendToRobot(message, Guard.DefaultName);
-
-						
-						try {
-							Thread.sleep(50);
-						} catch (InterruptedException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
+		
+		public void run() {
+			while (true) {
+				controller.poll();
+				if(!controllerEnabled)
+					if(controller.start.getPollData() == 1)
+						controllerEnabled = true;
 				
+				if (controllerEnabled) {
+					controller.poll();
+					float leftAnalog = controller.leftXAxis.getPollData();
+					float rightAnalog = controller.rightYAxis.getPollData();
+					
+					if(leftAnalog < 0.25 && leftAnalog > -0.25)
+						leftAnalog = 0;
+					if(rightAnalog < 0.25 && rightAnalog > -0.25)
+						rightAnalog = 0;
+					XboxMovement message = new XboxMovement(leftAnalog, rightAnalog);
+					guard.getClient().sendToRobot(message, Guard.DefaultName);
+					
+					
+					try {
+						Thread.sleep(50);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
 				}
 			}
 		}
@@ -110,7 +106,7 @@ public class GuardGUI {
 		boolean rightZoneClear = msg.get(Boolean.class, "right");
 		
 		zones.setText("down: " + downZoneClear + ", up: " + upZoneClear + ", left: "
-		  + leftZoneClear + ", right: " + rightZoneClear);
+		+ leftZoneClear + ", right: " + rightZoneClear);
 		
 		String instr = "none";
 		if (!downZoneClear) {
@@ -131,7 +127,7 @@ public class GuardGUI {
 	}
 	
 	private class KeyboardControl implements KeyListener {
-
+		
 		boolean up = false;
 		boolean down = false;
 		boolean left = false;
@@ -192,7 +188,7 @@ public class GuardGUI {
 				guard.getClient().sendToRobot(message, Guard.DefaultName);
 			}
 		}
-
+		
 		@Override
 		public void keyReleased(KeyEvent e) {
 			System.out.println("released: " + e.getKeyCode());
@@ -222,7 +218,7 @@ public class GuardGUI {
 				}
 			}
 		}
-
+		
 		@Override
 		public void keyTyped(KeyEvent e) {
 		}
