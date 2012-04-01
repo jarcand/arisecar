@@ -48,6 +48,24 @@ public class RobotClient extends AbstractClient {
             	try {
             		sendToServer(MessageFactory.createVehicleUpdate(getName(), v));
         			sendToServer(MessageFactory.createMVUpdate(getName(), mv));
+        			int forward = 0;
+        			int turnRate = 0;
+        			
+        			if(!mv.isLeftZoneClear()){
+        				turnRate = 1;
+        			}
+        			if(!mv.isRightZoneClear()){
+        				turnRate = -1;
+        			}
+        			if(!mv.isLeftZoneClear() && !mv.isRightZoneClear()){
+        				turnRate = 0;
+        				System.out.println("Can't move");
+        			}
+        			int leftMotor = Math.round((RobotMessageControl.convert(forward, turnRate / 2.0f) + 1) * 30);
+        			int rightMotor = Math.round((RobotMessageControl.convert(forward, -turnRate / 2.0f) + 1) * 30);
+        			
+        			v.setMotor1(leftMotor);
+        			v.setMotor2(rightMotor);
                 } catch (IOException e) {
 	                e.printStackTrace();
                 }
