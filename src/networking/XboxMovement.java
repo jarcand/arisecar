@@ -2,22 +2,12 @@ package networking;
 
 public class XboxMovement {
 
-private float leftAnalog;
-private float rightAnalog;
+	public final float x;
+	public final float y;
 
 	public XboxMovement(float leftAnalog, float rightAnalog)
 	{
-		this.leftAnalog = leftAnalog;
-		this.rightAnalog = rightAnalog;
+		this.x = leftAnalog;
+		this.y = rightAnalog;
 	}
-	
-	public float getLeftAnalog()
-	{
-		return leftAnalog;
-	}
-	public float getRightAnalog()
-	{
-		return rightAnalog;
-	}
-
 }

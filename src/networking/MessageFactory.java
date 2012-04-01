@@ -6,40 +6,27 @@ import robot.VehicleModel;
 public class MessageFactory {
 	
 	public static Message createXboxMovement(XboxMovement movement, String robotName){
-		Message message = new Message(Message.Type.XBOX_MOVEMENT, robotName, Message.ToRobot, Message.FromClient);
-		message.setValue(movement.getLeftAnalog(), "x");
-		message.setValue(movement.getRightAnalog(), "y");
+		Message message = new Message(robotName, movement, Message.ToRobot, Message.FromClient);
 		return message;
 	}
 	
 	public static Message createKeyboardMovement(KeyboardMovement movement, String robotName) {
-		Message message = new Message(Message.Type.KEYBOARD_MOVEMENT, robotName, Message.ToRobot, Message.FromClient);
-		message.setValue(movement.getType(), "type");
-		message.setValue(movement.getState(), "state");
+		Message message = new Message(robotName, movement, Message.ToRobot, Message.FromClient);
 		return message;
 	}
 	
 	public static Message createMVInstruction(String robotName, boolean mvOn) {
-		Message msg = new Message(Message.Type.MV_INSTR, robotName, Message.ToClient, Message.FromRobot);
-		msg.setValue(mvOn, "on");
+		Message msg = new Message(robotName, new MVInstruction(mvOn), Message.ToClient, Message.FromRobot);
 		return msg;
 	}
 	
 	public static Message createMVUpdate(String robotName, MVClient mv) {
-		Message msg = new Message(Message.Type.MV_UPDATE, robotName, Message.ToClient, Message.FromRobot);
-		msg.setValue(mv.isDownZoneClear(), "down");
-		msg.setValue(mv.isUpZoneClear(), "up");
-		msg.setValue(mv.isLeftZoneClear(), "left");
-		msg.setValue(mv.isRightZoneClear(), "right");
+		Message msg = new Message(robotName, new MVUpdate(mv), Message.ToClient, Message.FromRobot);
 		return msg;
 	}
 	
 	public static Message createVehicleUpdate(String robotName, VehicleModel v) {
-		Message msg = new Message(Message.Type.VEHICLE_UPDATE, robotName, Message.ToClient, Message.FromRobot);
-		msg.setValue(v.getPosX(), "posX");
-		msg.setValue(v.getPosY(), "posY");
-		msg.setValue(v.getAngle(), "angle");
-		msg.setValue(v.getRadius(), "radius");
+		Message msg = new Message(robotName, new VehicleUpdate(v), Message.ToClient, Message.FromRobot);
 		return msg;
 	}
 }

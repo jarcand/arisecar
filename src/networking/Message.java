@@ -1,8 +1,6 @@
 package networking;
 
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map.Entry;
 
 public class Message implements Serializable{
 	
@@ -15,22 +13,16 @@ public class Message implements Serializable{
 	public static final int FromClient = 0;
 	public static final int FromRobot = 1;
 
-	private final Type ID;
 	private final int destination;
 	private final int source;
 	private final String robotName;
-	protected final HashMap<String, Object> map;
+	private final Object value;
 	
-	public Message(Type ID, String robotName, int destination, int source){
-		this.ID = ID;
+	public Message(String robotName, Object value, int destination, int source){
 		this.robotName = robotName;
+		this.value = value;
 		this.destination = destination;
 		this.source = source;
-		map = new HashMap<String, Object>();
-	}
-	
-	public Type getID(){
-		return ID;
 	}
 	
 	public String getRobotName(){
@@ -53,26 +45,25 @@ public class Message implements Serializable{
 		return ((destination == ToClient) || (destination == ToRobotAndClient));
 	}
 	
-	public void setValue(Object obj, String valueName){
-		map.put(valueName, obj);
+	public Object getValue(){
+		return value;
 	}
 	
 	@SuppressWarnings("unchecked")
-	public <E extends Object>E get(Class<E> type, String parameterName){
-		return (E) map.get(parameterName);
+	public <E extends Object>E get(Class<E> type){
+		return (E) value;
 	}
+ 
 	
 	@Override
 	public String toString(){
-		StringBuffer sb = new StringBuffer();
-		sb.append("Message(id:").append(ID);
-		for (Entry<String, Object> entry : map.entrySet()) {
-		    sb.append(",").append(entry.getKey()).append(":").append(entry.getValue());
+		String result = "";
+		if(value!=null){
+			result = value.toString();
+		}else{
+			result = null;
 		}
-		return sb.append(")").toString();
+		return result;
 	}
-
-	public enum Type {
-		UNKNOWN, XBOX_MOVEMENT, KEYBOARD_MOVEMENT, VEHICLE_UPDATE, MV_UPDATE, MV_INSTR
-	}
+	
 }

@@ -2,6 +2,7 @@ package robot;
 
 import java.io.IOException;
 import java.net.UnknownHostException;
+import networking.MVInstruction;
 import networking.Message;
 import networking.MessageFactory;
 import ca.ariselab.utils.LoopingThread;
@@ -230,8 +231,8 @@ public class RobotClient extends AbstractClient {
 			Message message = (Message)msg;
 			if(message.isToRobot()){
 				if(message.getRobotName().equals(getName())){
-					if (message.getID() == Message.Type.MV_INSTR) {
-						mvOn = message.get(Boolean.class, "on");
+					if (message.getValue() instanceof MVInstruction) {
+						mvOn = message.get(MVInstruction.class).mvOn;
 					} else {
 						msgCtrl.handleMessage(message);
 					}
