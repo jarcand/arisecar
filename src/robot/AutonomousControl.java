@@ -7,14 +7,14 @@ package robot;
  */
 public class AutonomousControl {
 	
-	private static final float NORMAL_FORWARD_RATE = 0.6f;
-	private static final float SLOW_FOWARD_RATE = 0.3f;
-	private static final float STOPPED_TURN_RATE = 0.15f;
+	private static final float NORMAL_FORWARD_RATE = 0.3f;
+	private static final float SLOW_FOWARD_RATE = 0.15f;
+	private static final float STOPPED_TURN_RATE = 0.07f;
 	private static final float MOVING_TURN_RATE = 0.2f;
-	private static final float NO_PASS_TURN_RATE = 0.15f;
+	private static final float NO_PASS_TURN_RATE = 0.07f;
 	
 	private static final float MAX_SPEED_CHANGE = 0.02f;
-	private static final float MAX_YAW_CHANGE = 0.01f;
+	private static final float MAX_YAW_CHANGE = 0.02f;
 	
 	private final VehicleModel v;
 	private final MVClient mv;
@@ -68,7 +68,9 @@ public class AutonomousControl {
 			
 		} else {
 			
-			if (!mv.isUpZoneClear() || (!mv.isLeftZoneClear() && !mv.isRightZoneClear())) {
+			if (!mv.isUpZoneClear()) {
+				forward = 0.0f;
+			} else if (!mv.isLeftZoneClear() && !mv.isRightZoneClear()) {
 				forward = SLOW_FOWARD_RATE;
 			} else {
 				forward = NORMAL_FORWARD_RATE;
