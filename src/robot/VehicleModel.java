@@ -59,6 +59,11 @@ public class VehicleModel {
 		return angle;
 	}
 	
+	public boolean isNotDeadman() {
+		return 500 < locoArduino.getDeadman()
+		  && locoArduino.getDeadman() < 1500;
+	}
+	
 	public void setMotor1(int motor1) {
 		locoArduino.setMotor1(motor1);
 	}
