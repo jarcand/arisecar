@@ -97,7 +97,7 @@ public class AutonomousControl {
 		
 		if (deltaYaw > MAX_YAW_CHANGE) {
 			deltaYaw = MAX_YAW_CHANGE;
-		} else if (deltaSpeed < -MAX_YAW_CHANGE) {
+		} else if (deltaYaw < -MAX_YAW_CHANGE) {
 			deltaYaw = -MAX_YAW_CHANGE;
 		}
 		
