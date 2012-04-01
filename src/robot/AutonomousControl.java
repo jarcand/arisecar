@@ -27,9 +27,51 @@ public class AutonomousControl {
 			return false;
 		}
 		
-		float forward = 0;
-		float turnRate = 0;
+		final float NORMAL_FORWARD_RATE = 0.6f;
+		final float SLOW_FOWARD_RATE = 0.3f;
+		final float STOPPED_TURN_RATE = 0.15f;
+		final float MOVING_TURN_RATE = 0.2f;
+		final float NO_PASS_TURN_RATE = 0.15f;
 		
+		Float forward;
+		Float turnRate;
+		
+		if (!mv.isDownZoneClear()) {
+			forward = 0.0f;
+			
+			if (mv.isLeftZoneClear() == mv.isRightZoneClear()) {
+				turnRate = NO_PASS_TURN_RATE;
+			} else if (!mv.isLeftZoneClear()) {
+				turnRate = STOPPED_TURN_RATE;
+			} else if (!mv.isRightZoneClear()) {
+				turnRate = -STOPPED_TURN_RATE;
+			} else {
+				turnRate = 0.0f;
+				Log.logFatal("FLAW in AC logic (1)");
+			}
+			
+		} else {
+			
+			if (!mv.isUpZoneClear() || (!mv.isLeftZoneClear() && !mv.isRightZoneClear())) {
+				forward = SLOW_FOWARD_RATE;
+			} else {
+				forward = NORMAL_FORWARD_RATE;
+			}
+			
+			if (mv.isLeftZoneClear() == mv.isRightZoneClear()) {
+				turnRate = 0.0f;
+			} else if (!mv.isLeftZoneClear()) {
+				turnRate = MOVING_TURN_RATE;
+			} else if (!mv.isRightZoneClear()) {
+				turnRate = -MOVING_TURN_RATE;
+			} else {
+				turnRate = 0.0f;
+				Log.logFatal("FLAW in AC logic (2)");
+			}
+		}
+		
+		
+		/*
 		if(!mv.isLeftZoneClear() && !mv.isUpZoneClear() && mv.isDownZoneClear() && mv.isRightZoneClear())
 		{
 			forward = 0.3f;
@@ -177,7 +219,7 @@ public class AutonomousControl {
 		
 		// Update the speed and yaw rates
 		v.setSpeed(forward);
-		v.setYawRate(turnRate / 2);
+		v.setYawRate(turnRate);
 		
 		return true;
 	}
