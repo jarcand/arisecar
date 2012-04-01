@@ -21,7 +21,7 @@ public class GeneralLog {
 	String pathName2 = "logging/Log.txt";
 	File file;
 	
-	boolean printOut = false;
+	boolean printOut = true;
 	
 	public GeneralLog(){
 		File dir = new File(".");
