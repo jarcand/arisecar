@@ -14,22 +14,32 @@ import ca.ariselab.lib.serialdevices.SerialDeviceInitException;
 import ca.ariselab.lib.serialdevices.SerialModule;
 import ca.ariselab.lib.serialdevices.SerialPortMgmt;
 
-
+/**
+ * A class that represents the state of the arduino that has the locomotion
+ * circuits attached.
+ * @author Jeffrey Arcand <jeffrey.arcand@ariselab.ca>
+ */
 public abstract class LocoArduino extends SerialModule {
 	
+	/** A struct to of all the inputs from the arduino. */
 	private class Inputs {
-		int motor1Target, motor2Target, motor1SetPoint, motor2SetPoint;
+		int motorLTarget, motorRTarget, motorLSetPoint, motorRSetPoint;
 		int rangeFinder1, rangeFinder2, rangeFinder3, deadman;
 	}
+	
+	// Properties of the module
 	private String friendlyID;
 	private int ardID;
-	private int motor1Out = 90, motor2Out = 90;
+	
+	// I/O state variables 
+	private int motorLOut = 90, motorROut = 90;
 	private Inputs inputs = new Inputs();
 	
 	// Constructors ========================================================
 	
 	/**
-	 * Create a new Arduino Pontoon object to communicate with the Arduino on the specified serial port.
+	 * Create a new Arduino Pontoon object to communicate with the Arduino on
+	 * the specified serial port.
 	 */
 	public LocoArduino(SerialDeviceID devID) throws SerialDeviceInitException {
 		super(devID);
@@ -50,8 +60,8 @@ public abstract class LocoArduino extends SerialModule {
 		writeByte(0xFF); // start-of-message-byte-2
 		writeByte(0xAB); // start-of-message-byte-3
 		writeByte(ardID); // start-of-message-byte-4
-		writeByte(motor1Out);
-		writeByte(motor2Out);
+		writeByte(motorLOut);
+		writeByte(motorROut);
 		writeBytes(new byte[26]);
 	}
 	
@@ -59,9 +69,10 @@ public abstract class LocoArduino extends SerialModule {
 	 * Read the data from the Arduino.
 	 */
 	protected synchronized void readUpdatesFromDevice() throws IOException {
-		if (readByte() != 0x55) {
+		
+		// Make sure the message is synchronized 
+		while (readByte() != 0x55) {
 			System.out.print('b');
-			return;
 		}
 		if (readByte() != 0xFF) {
 			System.out.print('c');
@@ -76,16 +87,18 @@ public abstract class LocoArduino extends SerialModule {
 			return;
 		}
 		
-		Inputs newData = new Inputs();
-		newData.motor1Target = readByte();
-		newData.motor2Target = readByte();
-		newData.motor1SetPoint = readShort();
-		newData.motor2SetPoint = readShort();
-		newData.rangeFinder1 = readShort();
-		newData.rangeFinder2 = readShort();
-		newData.rangeFinder3 = readShort();
-		newData.deadman = readShort();
+		// Get all the inputs from the arduino and store them temporarily
+		Inputs tempInputs = new Inputs();
+		tempInputs.motorLTarget = readByte();
+		tempInputs.motorRTarget = readByte();
+		tempInputs.motorLSetPoint = readShort();
+		tempInputs.motorRSetPoint = readShort();
+		tempInputs.rangeFinder1 = readShort();
+		tempInputs.rangeFinder2 = readShort();
+		tempInputs.rangeFinder3 = readShort();
+		tempInputs.deadman = readShort();
 		
+		// Ensure the rest of the message is blank as expected
 		boolean err = false;
 		for (int i = 0; i < 14; i++) {
 			char c = (char) readByte();
@@ -94,11 +107,13 @@ public abstract class LocoArduino extends SerialModule {
 				err = true;
 			}
 		}
-		if (!err) {
-			inputs = newData;
-		}
 		
-		inputsUpdated();
+		// If there were no errors, approve the temporary input values,
+		// and notify the subclass that the inputs have been updated
+		if (!err) {
+			inputs = tempInputs;
+			inputsUpdated();
+		}
 	}
 	
 	/**
@@ -109,46 +124,36 @@ public abstract class LocoArduino extends SerialModule {
 	// Accessors ===========================================================
 	
 	/**
-	 * Get the desired value for motor 1.
+	 * Get the desired value for the left motor.
 	 * @return The desired servo position of the ESC controlling the motor.
 	 */
-	public int getMotor1Target() {
-		return inputs.motor1Target;
+	public int getMotorLTarget() {
+		return inputs.motorLTarget;
 	}
 
 	/**
-	 * Get the desired value for motor 2.
+	 * Get the desired value for the right motor.
 	 * @return The desired servo position of the ESC controlling the motor.
 	 */
-	public int getMotor2Target() {
-		return inputs.motor2Target;
+	public int getMotorRTarget() {
+		return inputs.motorRTarget;
 	}
 
 	/**
-	 * Get the actual value for motor 1.
+	 * Get the actual value for the left motor.
 	 * @return The actual pulse length of the ESC controlling the motor.
 	 */
-	public int getMotor1SetPoint() {
-		return inputs.motor1SetPoint;
+	public int getMotorLSetPoint() {
+		return inputs.motorLSetPoint;
 	}
 
 	/**
-	 * Get the actual value for motor 2.
+	 * Get the actual value for the right motor.
 	 * @return The actual pulse length of the ESC controlling the motor.
 	 */
-	public int getMotor2SetPoint() {
-		return inputs.motor2SetPoint;
+	public int getMotorRSetPoint() {
+		return inputs.motorRSetPoint;
 	}
-
-	/**
-	 * Get the latest reading of thermometer 1.
-	 * @return Raw ADC10 reading.
-	 *
-	public float getThermometer1() {
-		float celcius = ADC10.convertMCP9700A(motor1Target);
-		thermometer1buff.add(celcius);
-		return thermometer1buff.get();
-	}*/
 
 	/**
 	 * Get the latest reading of range finder 1.
@@ -186,31 +191,38 @@ public abstract class LocoArduino extends SerialModule {
 	}
 
 	/**
-	 * Set the desired value for motor 1.
-	 * @param motor1 The servo position of the ESC controlling the motor.
+	 * Set the desired value for the left motor.
+	 * @param leftMotor The servo position of the ESC controlling the motor.
 	 */
-	public void setMotor1(int motor1) {
-		motor1Out = motor1;
+	public void setMotorL(int leftMotor) {
+		motorLOut = leftMotor;
 	}
 
 	/**
-	 * Set the desired value for motor 2.
-	 * @param motor2 The servo position of the ESC controlling the motor.
+	 * Set the desired value for the right motor.
+	 * @param rightMotor The servo position of the ESC controlling the motor.
 	 */
-	public void setMotor2(int motor2) {
-		motor2Out = motor2;
+	public void setMotorR(int rightMotor) {
+		motorROut = rightMotor;
 	}
 
 	// Development / Debug =================================================
 
+	/**
+	 * A text representation of all the inputs/outputs.
+	 */
 	public String toString() {
 		return "LocoArduino(" + friendlyID + "): "
-		  + getMotor1Target() + " " + getMotor2Target() + " "
-		  + getMotor1SetPoint() + " " + getMotor2SetPoint() + " "
+		  + getMotorLTarget() + " " + getMotorRTarget() + " "
+		  + getMotorLSetPoint() + " " + getMotorRSetPoint() + " "
 		  + getRangeFinder1() + " " + getRangeFinder2() + " "
 		  + getRangeFinder3() + " " + getDeadman();
 	}
 	
+	/**
+	 * A stand-alone test of the class.
+	 * @param args
+	 */
 	public static void main(String[] args) {
 		SerialPortMgmt.listSerialPorts();
 		try {

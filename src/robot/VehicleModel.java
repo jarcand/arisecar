@@ -65,11 +65,11 @@ public class VehicleModel {
 	}
 	
 	public void setMotor1(int motor1) {
-		locoArduino.setMotor1(motor1);
+		locoArduino.setMotorL(motor1);
 	}
 	
 	public void setMotor2(int motor2) {
-		locoArduino.setMotor2(motor2);
+		locoArduino.setMotorR(motor2);
 	}
 	
 	public void update() {
@@ -81,11 +81,11 @@ public class VehicleModel {
 		long deltaTime = (currentUpdateTime - lastUpdateTime) / 1000 / 1000;
 		lastUpdateTime = currentUpdateTime;
  
-		int motor1SetPoint = locoArduino.getMotor1SetPoint();
+		int motor1SetPoint = locoArduino.getMotorLSetPoint();
 		if (motor1SetPoint < 1000) {
 			motor1SetPoint = 1500;
 		}
-		int motor2SetPoint = locoArduino.getMotor2SetPoint();
+		int motor2SetPoint = locoArduino.getMotorRSetPoint();
 		if (motor2SetPoint < 1000) {
 			motor2SetPoint = 1500;
 		}
