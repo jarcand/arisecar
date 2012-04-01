@@ -175,11 +175,9 @@ public class AutonomousControl {
 			System.out.println("In right zone");
 		}*/
 		
-		int leftMotor = Math.round((RobotMessageControl.convert(forward, turnRate / 2.0f) + 1) * 90);
-		int rightMotor = Math.round((RobotMessageControl.convert(forward, -turnRate / 2.0f) + 1) * 90);
-		
-		v.setLeftMotor(leftMotor);
-		v.setRightMotor(rightMotor);
+		// Update the speed and yaw rates
+		v.setSpeed(forward);
+		v.setYawRate(turnRate / 2);
 		
 		return true;
 	}

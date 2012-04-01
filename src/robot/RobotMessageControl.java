@@ -51,24 +51,9 @@ public class RobotMessageControl {
 				break;
 		}
 		
-		int leftMotor = Math.round((convert(forward, turnRate / 2) + 1) * 90);
-		int rightMotor = Math.round((convert(forward, -turnRate / 2) + 1) * 90);
-		
-		v.setLeftMotor(leftMotor);
-		v.setRightMotor(rightMotor);
-		
-		//System.out.println("Message key : " + type);
-		//robot.getNode().sendInfo();
-	}
-	
-	public static float convert(float speed, float spin) {
-		final float gamma = 1f;
-		if (speed >= 0) {
-			return speed + (1 - (spin < 0 ? 0 : speed)) * spin * gamma;
-		} else {
-			//return speed * (1 + (spin < 0 ? 2 : 1) * spin * gamma) + spin * gamma;
-			return speed + spin;
-		}
+		// Update the speed and yaw rates
+		v.setSpeed(forward);
+		v.setYawRate(turnRate / 2);
 	}
 	
 	private void handleXboxMovement(XboxMovement message){
