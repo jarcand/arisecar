@@ -50,7 +50,7 @@ public class RobotClient extends AbstractClient {
             		sendToServer(MessageFactory.createVehicleUpdate(getName(), v));
         			sendToServer(MessageFactory.createMVUpdate(getName(), mv));
         			
-        			if (mvOn) {
+        			if (v.isNotDeadman()) {
 	        			float forward = 0;
 	        			float turnRate = 0;
 	        			
@@ -64,11 +64,14 @@ public class RobotClient extends AbstractClient {
 	        				turnRate = 0;
 	        				System.out.println("Can't move");
 	        			}
-	        			int leftMotor = Math.round((RobotMessageControl.convert(forward, turnRate / 2.0f) + 1) * 30);
-	        			int rightMotor = Math.round((RobotMessageControl.convert(forward, -turnRate / 2.0f) + 1) * 30);
+	        			int leftMotor = Math.round((RobotMessageControl.convert(forward, turnRate / 2.0f) + 1) * 90);
+	        			int rightMotor = Math.round((RobotMessageControl.convert(forward, -turnRate / 2.0f) + 1) * 90);
 	        			
 	        			v.setMotor1(leftMotor);
 	        			v.setMotor2(rightMotor);
+        			} else {
+        				v.setMotor1(90);
+        				v.setMotor2(90);
         			}
                 } catch (IOException e) {
 	                e.printStackTrace();
