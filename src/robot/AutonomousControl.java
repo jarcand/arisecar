@@ -7,8 +7,19 @@ package robot;
  */
 public class AutonomousControl {
 	
+	private static final float NORMAL_FORWARD_RATE = 0.6f;
+	private static final float SLOW_FOWARD_RATE = 0.3f;
+	private static final float STOPPED_TURN_RATE = 0.15f;
+	private static final float MOVING_TURN_RATE = 0.2f;
+	private static final float NO_PASS_TURN_RATE = 0.15f;
+	private static final float MAX_SPEED_CHANGE = 0.1f;
+	private static final float MAX_YAW_CHANGE = 0.1f;
+	
 	private final VehicleModel v;
 	private final MVClient mv;
+	
+	private float lastSpeed = 0;
+	private float lastYaw = 0;
 	
 	/**
 	 * Create a new autonomous control with the provided vehicle model and MV client.
@@ -27,11 +38,6 @@ public class AutonomousControl {
 			return false;
 		}
 		
-		final float NORMAL_FORWARD_RATE = 0.6f;
-		final float SLOW_FOWARD_RATE = 0.3f;
-		final float STOPPED_TURN_RATE = 0.15f;
-		final float MOVING_TURN_RATE = 0.2f;
-		final float NO_PASS_TURN_RATE = 0.15f;
 		
 		Float forward;
 		Float turnRate;
@@ -217,9 +223,28 @@ public class AutonomousControl {
 			System.out.println("In right zone");
 		}*/
 		
+		
+		float deltaSpeed = forward - lastSpeed;
+		float deltaYaw = turnRate - lastYaw;
+		
+		if (deltaSpeed > MAX_SPEED_CHANGE) {
+			deltaSpeed = MAX_SPEED_CHANGE;
+		} else if (deltaSpeed < -MAX_SPEED_CHANGE) {
+			deltaSpeed = -MAX_SPEED_CHANGE;
+		}
+		
+		if (deltaYaw > MAX_YAW_CHANGE) {
+			deltaYaw = MAX_YAW_CHANGE;
+		} else if (deltaSpeed < -MAX_YAW_CHANGE) {
+			deltaYaw = -MAX_YAW_CHANGE;
+		}
+		
+		lastSpeed += deltaSpeed;
+		lastYaw += deltaYaw;
+		
 		// Update the speed and yaw rates
-		v.setSpeed(forward);
-		v.setYawRate(turnRate);
+		v.setSpeed(lastSpeed);
+		v.setYawRate(lastYaw);
 		
 		return true;
 	}
