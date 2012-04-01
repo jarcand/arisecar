@@ -1,6 +1,7 @@
 package robot;
 
 import java.io.IOException;
+import java.net.SocketException;
 import java.net.UnknownHostException;
 import networking.MVInstruction;
 import networking.Message;
@@ -27,28 +28,32 @@ public class RobotClient extends AbstractClient {
 	private MVClient mv;
 	public boolean mvOn = true;
 	private final AutonomousControl ac;
+	private boolean connectedToHost = false;
 	
-	public RobotClient(String host, int port, String robot, String mvHost) {
-		super(host, port);
+	public RobotClient(String robot, String hsHost, int hsPort, String mvHost, int mvPort) {
+		super(hsHost, hsPort);
 		name = robot;
 		v = new VehicleModel();
 		try {
-	        mv = new MVClient(mvHost, MV_PORT);
+	        mv = new MVClient(mvHost, mvPort);
+	        Log.logInfo("Connected to MV server at " + mvHost + ":" + mvPort);
         } catch (UnknownHostException e1) {
-        	Log.logError("Could not find MV server.");
+        	Log.logError("Could not find MV server at " + mvHost + ":" + mvPort);
         } catch (IOException e1) {
-        	Log.logError("Could not connect to to MV server.");
+        	Log.logError("Could not connect to to MV server at " + mvHost + ":" + mvPort);
         }
 		msgCtrl = new RobotMessageControl(v);
 		ac = new AutonomousControl(v, mv);
 		
-		Log.logInfo("Client establishing connection with " + host + ":" + port);
 		try {
 			openConnection();
+			connectedToHost = true;
+			Log.logInfo("Connected to HostServer at " + hsHost + ":" + hsPort);
+		} catch (SocketException e) {
+			Log.logError("Could not connect to HostServer at " + hsHost + ":" + hsPort);
 		} catch (IOException e) {
-			e.printStackTrace();
+			Log.logError("Could not connect to HostServer at " + hsHost + ":" + hsPort);
 		}
-		Log.logInfo("Connection established");
 		(new LoopingThread("robot updates", 0, 100) {
             protected void mainLoop() {
 //            	v.updatePosition();
@@ -98,7 +103,13 @@ public class RobotClient extends AbstractClient {
 			}
 		}
 	}
-
+	
+	public void sendToServer(Object msg) throws IOException	{
+		if (connectedToHost) {
+			super.sendToServer(msg);
+		}
+	}
+	
 	/**
 	 * Hook method called after the connection has been closed.
 	 */
@@ -132,6 +143,6 @@ public class RobotClient extends AbstractClient {
 		if (args.length > 0) {
 			mvHost = args[0];
 		}
-		new RobotClient("localhost", 5555, "Gudra", mvHost);
+		new RobotClient("Gudra", "localhost", 5555, mvHost, MV_PORT);
 	}
 }
