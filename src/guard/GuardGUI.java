@@ -16,7 +16,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import networking.KeyboardMovement;
-import networking.Message;
+import networking.MVUpdate;
 import networking.MessageFactory;
 import networking.XboxMovement;
 
@@ -110,11 +110,11 @@ public class GuardGUI {
 		}
 	}
 	
-	public void updateZones(Message msg) {
-		boolean downZoneClear = msg.get(Boolean.class, "down");
-		boolean upZoneClear = msg.get(Boolean.class, "up");
-		boolean leftZoneClear = msg.get(Boolean.class, "left");
-		boolean rightZoneClear = msg.get(Boolean.class, "right");
+	public void updateZones(MVUpdate msg) {
+		boolean downZoneClear = msg.down;
+		boolean upZoneClear = msg.up;
+		boolean leftZoneClear = msg.left;
+		boolean rightZoneClear = msg.right;
 		
 		zones.setText("down: " + downZoneClear + ", up: " + upZoneClear + ", left: "
 		+ leftZoneClear + ", right: " + rightZoneClear);

@@ -2,7 +2,9 @@ package guard;
 
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
+import networking.MVUpdate;
 import networking.Message;
+import networking.VehicleUpdate;
 
 public class GuardMessageControl {
 	
@@ -17,12 +19,14 @@ public class GuardMessageControl {
 	}
 	
 	public void handleMessage(Message message){
-		if (message.getID() == Message.Type.VEHICLE_UPDATE) {
-			lastRadius = message.get(Double.class, "radius");
-			lastAngle = message.get(Double.class, "angle");
+		if (message.getValue() instanceof VehicleUpdate) {
+			VehicleUpdate vh = message.get(VehicleUpdate.class);
+			lastRadius = vh.radius;
+			lastAngle = vh.angle;
 			
-			double x = message.get(Double.class, "posX");
-			double y = message.get(Double.class, "posY");
+			double x = vh.posX;
+			double y = vh.posY;
+			
 			if (points.size() > 0) {
 				Point2D.Double lastPoint = points.get(points.size() - 1);
 				if (lastPoint.getX() == x && lastPoint.getY() == y) {
@@ -35,9 +39,9 @@ public class GuardMessageControl {
 			if (guard.getGUI() != null) {
 				guard.getGUI().frame.repaint();
 			}
-		} else if (message.getID() == Message.Type.MV_UPDATE) {
+		} else if (message.getValue() instanceof MVUpdate) {
 			if (guard.getGUI() != null) {
-				guard.getGUI().updateZones(message);
+				guard.getGUI().updateZones(message.get(MVUpdate.class));
 			}
 		}
 	}

@@ -2,6 +2,7 @@ package robot;
 
 import networking.KeyboardMovement;
 import networking.Message;
+import networking.XboxMovement;
 
 public class RobotMessageControl {
 	
@@ -14,16 +15,16 @@ public class RobotMessageControl {
 	}
 	
 	public void handleMessage(Message message) {
-		if (message.getID() == Message.Type.XBOX_MOVEMENT) {
-			handleXboxMovement(message);
-		} else if (message.getID() == Message.Type.KEYBOARD_MOVEMENT) {
-			handleKeyboardMovement(message);
+		if (message.getValue() instanceof XboxMovement) {
+			handleXboxMovement(message.get(XboxMovement.class));
+		} else if (message.getValue() instanceof KeyboardMovement) {
+			handleKeyboardMovement(message.get(KeyboardMovement.class));
 		}
 	}
 	
-	private void handleKeyboardMovement(Message message){
-		int type = message.get(Integer.class, "type");
-		int state = message.get(Integer.class, "state");
+	private void handleKeyboardMovement(KeyboardMovement message){
+		int type = message.type;
+		int state = message.state;
 		switch (type) {
 			case KeyboardMovement.Up:
 				forward = state == 1 ? 1 : 0;
@@ -70,15 +71,11 @@ public class RobotMessageControl {
 		}
 	}
 	
-	private void handleXboxMovement(Message message){
-		@SuppressWarnings("unused")
-		double x = message.get(Double.class, "x");
-		@SuppressWarnings("unused")
-		double y = message.get(Double.class, "y");
-		@SuppressWarnings("unused")
-		double z = message.get(Double.class, "z");
-		@SuppressWarnings("unused")
-        double rx = message.get(Double.class, "rx");
+	private void handleXboxMovement(XboxMovement message){
+		//double x = message.x;
+		//double y = message.y;
+		//double z = message.z;
+        //double rx = message.rx;
 		
 		/*
 		if(z == 0){
