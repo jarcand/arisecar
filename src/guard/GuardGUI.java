@@ -160,7 +160,7 @@ public class GuardGUI {
 					setAllFalse();
 					up = true;
 					//Create message up and send it
-					KeyboardMovement message = new KeyboardMovement(KeyboardMovement.Up, KeyboardMovement.PRESS);
+					KeyboardMovement message = new KeyboardMovement(KeyboardMovement.Direction.UP, KeyboardMovement.State.PRESS);
 					guard.getClient().sendToRobot(message, Guard.DefaultName);
 				}
 			}else if(e.getKeyCode() == KeyEvent.VK_DOWN){
@@ -169,7 +169,7 @@ public class GuardGUI {
 					setAllFalse();
 					down = true;
 					//Create message down and send it
-					KeyboardMovement message = new KeyboardMovement(KeyboardMovement.Down, KeyboardMovement.PRESS);
+					KeyboardMovement message = new KeyboardMovement(KeyboardMovement.Direction.DOWN, KeyboardMovement.State.PRESS);
 					guard.getClient().sendToRobot(message, Guard.DefaultName);
 				}
 			}else if(e.getKeyCode() == KeyEvent.VK_LEFT){
@@ -178,7 +178,7 @@ public class GuardGUI {
 					setAllFalse();
 					left = true;
 					//Create message left and send it
-					KeyboardMovement message = new KeyboardMovement(KeyboardMovement.Left, KeyboardMovement.PRESS);
+					KeyboardMovement message = new KeyboardMovement(KeyboardMovement.Direction.LEFT, KeyboardMovement.State.PRESS);
 					guard.getClient().sendToRobot(message, Guard.DefaultName);
 				}
 			}else if(e.getKeyCode() == KeyEvent.VK_RIGHT){
@@ -187,7 +187,7 @@ public class GuardGUI {
 					setAllFalse();
 					right = true;
 					//Create message right and send it
-					KeyboardMovement message = new KeyboardMovement(KeyboardMovement.Right, KeyboardMovement.PRESS);
+					KeyboardMovement message = new KeyboardMovement(KeyboardMovement.Direction.RIGHT, KeyboardMovement.State.PRESS);
 					guard.getClient().sendToRobot(message, Guard.DefaultName);
 				}
 			} 
@@ -195,7 +195,7 @@ public class GuardGUI {
 				System.out.println("other key");
 				setAllFalse();
 				//Create message right and send it
-				KeyboardMovement message = new KeyboardMovement(KeyboardMovement.None, KeyboardMovement.PRESS);
+				KeyboardMovement message = new KeyboardMovement(KeyboardMovement.Direction.NONE, KeyboardMovement.State.PRESS);
 				guard.getClient().sendToRobot(message, Guard.DefaultName);
 			}
 		}
@@ -206,25 +206,25 @@ public class GuardGUI {
 			if(e.getKeyCode() == KeyEvent.VK_UP){
 				if(up){
 					setAllFalse();
-					KeyboardMovement message = new KeyboardMovement(KeyboardMovement.Up, KeyboardMovement.RELEASE);
+					KeyboardMovement message = new KeyboardMovement(KeyboardMovement.Direction.UP, KeyboardMovement.State.RELEASE);
 					guard.getClient().sendToRobot(message, Guard.DefaultName);
 				}
 			}else if(e.getKeyCode() == KeyEvent.VK_DOWN){
 				if(down){
 					setAllFalse();
-					KeyboardMovement message = new KeyboardMovement(KeyboardMovement.Down, KeyboardMovement.RELEASE);
+					KeyboardMovement message = new KeyboardMovement(KeyboardMovement.Direction.DOWN, KeyboardMovement.State.RELEASE);
 					guard.getClient().sendToRobot(message, Guard.DefaultName);
 				}
 			}else if(e.getKeyCode() == KeyEvent.VK_LEFT){
 				if(left){
 					setAllFalse();
-					KeyboardMovement message = new KeyboardMovement(KeyboardMovement.Left, KeyboardMovement.RELEASE);
+					KeyboardMovement message = new KeyboardMovement(KeyboardMovement.Direction.LEFT, KeyboardMovement.State.RELEASE);
 					guard.getClient().sendToRobot(message, Guard.DefaultName);
 				}
 			}else if(e.getKeyCode() == KeyEvent.VK_RIGHT){
 				if(right){
 					setAllFalse();
-					KeyboardMovement message = new KeyboardMovement(KeyboardMovement.Right, KeyboardMovement.RELEASE);
+					KeyboardMovement message = new KeyboardMovement(KeyboardMovement.Direction.RIGHT, KeyboardMovement.State.RELEASE);
 					guard.getClient().sendToRobot(message, Guard.DefaultName);
 				}
 			}

@@ -2,22 +2,19 @@ package networking;
 
 public class KeyboardMovement {
 	
-	public static final int None = -1;
-	public static final int Up = 0;
-	public static final int Down = 1;
-	public static final int Left = 2;
-	public static final int Right = 3;
+	public final Direction direction;
+	public final State state;
 	
-	public static final int PRESS = 1;
-	public static final int RELEASE = 2;
-	
-	public final int type;
-	public final int state;
-	
-	public KeyboardMovement(int type, int state) {
-		this.type = type;
+	public KeyboardMovement(Direction direction, State state) {
+		this.direction = direction;
 		this.state = state;
 	}
 	
-
+	public enum Direction {
+		NONE, UP, DOWN, LEFT, RIGHT
+	}
+	
+	public enum State {
+		PRESS, RELEASE
+	}
 }

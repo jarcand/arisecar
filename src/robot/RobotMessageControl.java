@@ -23,26 +23,26 @@ public class RobotMessageControl {
 	}
 	
 	private void handleKeyboardMovement(KeyboardMovement message){
-		int type = message.type;
-		int state = message.state;
+		KeyboardMovement.Direction type = message.direction;
+		KeyboardMovement.State state = message.state;
 		switch (type) {
-			case KeyboardMovement.Up:
-				forward = state == 1 ? 1 : 0;
+			case UP:
+				forward = state == KeyboardMovement.State.PRESS ? 1 : 0;
 				break;
 				
-			case KeyboardMovement.Down:
-				forward = state == 1 ? -1 : 0;
+			case DOWN:
+				forward = state == KeyboardMovement.State.PRESS ? -1 : 0;
 				break;
 				
-			case KeyboardMovement.Left:
-				turnRate = state == 1 ? -1 : 0;
+			case LEFT:
+				turnRate = state == KeyboardMovement.State.PRESS ? -1 : 0;
 				break;
 				
-			case KeyboardMovement.Right:
-				turnRate = state == 1 ? 1 : 0;
+			case RIGHT:
+				turnRate = state == KeyboardMovement.State.PRESS ? 1 : 0;
 				break;
 				
-			case KeyboardMovement.None:
+			case NONE:
 				forward = 0;
 				turnRate = 0;
 				break;
