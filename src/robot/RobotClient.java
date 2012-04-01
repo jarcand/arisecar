@@ -69,6 +69,7 @@ public class RobotClient extends AbstractClient {
         					Log.logError("Autonomous control is broken.");
         				}
         			} else {
+        				ac.reset();
         				v.setLeftMotor(90);
         				v.setRightMotor(90);
         			}

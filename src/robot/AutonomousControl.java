@@ -14,7 +14,7 @@ public class AutonomousControl {
 	private static final float NO_PASS_TURN_RATE = 0.15f;
 	
 	private static final float MAX_SPEED_CHANGE = 0.02f;
-	private static final float MAX_YAW_CHANGE = 0.02f;
+	private static final float MAX_YAW_CHANGE = 0.003f;
 	
 	private final VehicleModel v;
 	private final MVClient mv;
@@ -28,6 +28,15 @@ public class AutonomousControl {
 	public AutonomousControl(VehicleModel v, MVClient mv) {
 		this.v = v;
 		this.mv = mv;
+	}
+	
+	/**
+	 * Reset the internal variables.
+	 * TODO: this should not be necessary.
+	 */
+	public void reset() {
+		lastSpeed = 0;
+		lastYaw = 0;
 	}
 	
 	/**
@@ -76,154 +85,6 @@ public class AutonomousControl {
 				Log.logFatal("FLAW in AC logic (2)");
 			}
 		}
-		
-		
-		/*
-		if(!mv.isLeftZoneClear() && !mv.isUpZoneClear() && mv.isDownZoneClear() && mv.isRightZoneClear())
-		{
-			forward = 0.3f;
-			turnRate = 0.3f;
-		}
-		else if(mv.isLeftZoneClear() && !mv.isUpZoneClear() && mv.isDownZoneClear() && !mv.isRightZoneClear())
-		{
-			forward = 0.3f;
-			turnRate = -0.3f;
-		}
-		else if (!mv.isUpZoneClear() && mv.isLeftZoneClear() && mv.isRightZoneClear() && mv.isDownZoneClear())
-		{
-			forward = 0.3f;
-			turnRate = 0;
-		}
-		else if (!mv.isRightZoneClear() && !mv.isLeftZoneClear() && mv.isDownZoneClear() && mv.isUpZoneClear())
-		{
-			forward = 0.3f;
-			turnRate = 0;
-		}
-		else if(!mv.isRightZoneClear() && !mv.isDownZoneClear() && mv.isLeftZoneClear() && mv.isUpZoneClear())
-		{
-			forward = 0;
-			turnRate = -0.3f;
-		}
-		else if(mv.isRightZoneClear() && !mv.isDownZoneClear() && !mv.isLeftZoneClear() && mv.isUpZoneClear())
-		{
-			forward = 0;
-			turnRate = 0.3f;
-		}
-		else if(!mv.isDownZoneClear() && mv.isLeftZoneClear() && mv.isRightZoneClear() && mv.isUpZoneClear())
-		{
-			forward = 0;
-			turnRate = 0;
-		}
-		else if(mv.isDownZoneClear() && mv.isLeftZoneClear() && mv.isRightZoneClear() && mv.isUpZoneClear())
-		{
-			forward = 0.4f;
-			turnRate = 0;
-		}
-		else if (!mv.isDownZoneClear() && !mv.isLeftZoneClear() && !mv.isRightZoneClear() && !mv.isUpZoneClear())
-		{
-			forward = 0;
-			turnRate = 0.2f;
-		}
-		else if (mv.isDownZoneClear() && !mv.isUpZoneClear() && !mv.isLeftZoneClear() && !mv.isRightZoneClear())
-		{
-			forward = 0.2f;
-			turnRate = 0;
-		}
-		else
-		{
-			forward = 0;
-			turnRate = 0.2f;
-		}
-		
-		/*
-		if(!mv.isDownZoneClear())
-		{
-			if(!mv.isLeftZoneClear() && !mv.isRightZoneClear() )
-			{
-				forward = 0;
-				turnRate = 0;
-			}
-			else
-			{
-				if(!mv.isLeftZoneClear())
-				{
-					forward = 0;
-				    turnRate = 0.3f;
-				}
-				else if(!mv.isRightZoneClear())
-				{
-					forward = 0;
-					turnRate = -0.3f;
-				}
-			}
-
-		}
-		else if(!mv.isUpZoneClear())
-		{
-			if(mv.isDownZoneClear())
-			{
-				if(!mv.isLeftZoneClear() && !mv.isRightZoneClear())
-				{
-					forward = 0.3f;
-    				turnRate = 0;
-				}
-				else if(mv.isLeftZoneClear() && mv.isRightZoneClear())
-				{
-					forward = 0.3f;
-					turnRate = 0;
-				}
-				else if(mv.isRightZoneClear())
-				{
-					forward = 0.3f;
-					turnRate = 0.3f;
-				}
-				else if(mv.isLeftZoneClear())
-				{
-					forward = 0.3f;
-					turnRate = -0.3f;
-				}
-			}
-			else if(!mv.isDownZoneClear())
-			{
-				if(!mv.isLeftZoneClear() && !mv.isRightZoneClear())
-				{
-					forward = 0;
-					turnRate = 0;
-				}
-				else if(mv.isLeftZoneClear())
-				{
-					forward = 0;
-					turnRate = -0.3f;
-				}
-				else if(mv.isRightZoneClear())
-				{
-					forward = 0;
-					turnRate = 0.3f;
-				}
-			}
-			
-		}
-		else
-		{
-			forward = 0.3f;
-			turnRate = 0;
-		}*/
-		
-		
-		/*if(!mv.isDownZoneClear()){
-			turnRate = 0;
-			System.out.println("Bottom don't move");
-		}else if(!mv.isLeftZoneClear() && !mv.isRightZoneClear()){
-			turnRate = 0;
-			System.out.println("Can't move");
-		}else if(!mv.isLeftZoneClear()){
-			turnRate = 0.3f;
-			System.out.println("In left zone");
-		}else if(!mv.isRightZoneClear()){
-			turnRate = -0.3f;
-			System.out.println("In right zone");
-		}*/
-		
 		
 		float deltaSpeed = forward - lastSpeed;
 		float deltaYaw = turnRate - lastYaw;
