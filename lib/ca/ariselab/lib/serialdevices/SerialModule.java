@@ -322,6 +322,13 @@ public abstract class SerialModule {
 	}
 	
 	/**
+	 * @return A text representation of the port.
+	 */
+	public String getPort() {
+		return port.getName();
+	}
+	
+	/**
 	 * Get the port identifier of the specified port. 
 	 * @param portName The textual name of the desired port.
 	 * @return A port identifier object representing the desired port.
