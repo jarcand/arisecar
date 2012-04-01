@@ -23,7 +23,6 @@ public class GuardGUI {
 	private final Guard guard;
 	
 	private boolean controllerEnabled = false;
-	private boolean controllerExists = false;
 	
 	private JLabel zones;
 	private JLabel instructions;
@@ -53,15 +52,8 @@ public class GuardGUI {
 		
 		frame.setVisible(true);
 		
-		try{
-			XboxControl xboxListener = new XboxControl();
-			xboxListener.start();
-			controllerExists = true;
-			
-		} catch(Exception e)
-		{
-			controllerExists = false;
-		}
+		XboxControl xboxListener = new XboxControl();
+		xboxListener.start();
 	}
 	
 	private class XboxControl extends Thread {
