@@ -228,15 +228,15 @@ public class AutonomousControl {
 		float deltaSpeed = forward - lastSpeed;
 		float deltaYaw = turnRate - lastYaw;
 		
-		if (deltaSpeed > MAX_SPEED_CHANGE) {
+		if (deltaSpeed > MAX_SPEED_CHANGE && forward > 0) {
 			deltaSpeed = MAX_SPEED_CHANGE;
-		} else if (deltaSpeed < -MAX_SPEED_CHANGE) {
+		} else if (deltaSpeed < -MAX_SPEED_CHANGE && forward < 0) {
 			deltaSpeed = -MAX_SPEED_CHANGE;
 		}
 		
-		if (deltaYaw > MAX_YAW_CHANGE) {
+		if (deltaYaw > MAX_YAW_CHANGE && turnRate > 0) {
 			deltaYaw = MAX_YAW_CHANGE;
-		} else if (deltaSpeed < -MAX_YAW_CHANGE) {
+		} else if (deltaSpeed < -MAX_YAW_CHANGE && turnRate < 0) {
 			deltaYaw = -MAX_YAW_CHANGE;
 		}
 		
