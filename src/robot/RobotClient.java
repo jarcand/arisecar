@@ -18,7 +18,7 @@ public class RobotClient extends AbstractClient {
 	private RobotMessageControl msgCtrl;
 	private VehicleModel v;
 	private MVClient mv;
-	public boolean mvOn = false;
+	public boolean mvOn = true;
 	
 	public RobotClient(String host, int port, String robot, String mvHost) {
 		super(host, port);
@@ -55,16 +55,151 @@ public class RobotClient extends AbstractClient {
 	        			float forward = 0;
 	        			float turnRate = 0;
 	        			
-	        			if(!mv.isLeftZoneClear()){
+	        			if(!mv.isLeftZoneClear() && !mv.isUpZoneClear() && mv.isDownZoneClear() && mv.isRightZoneClear())
+	        			{
+	        				forward = 0.3f;
 	        				turnRate = 0.3f;
 	        			}
-	        			if(!mv.isRightZoneClear()){
+	        			else if(mv.isLeftZoneClear() && !mv.isUpZoneClear() && mv.isDownZoneClear() && !mv.isRightZoneClear())
+	        			{
+	        				forward = 0.3f;
 	        				turnRate = -0.3f;
 	        			}
-	        			if(!mv.isLeftZoneClear() && !mv.isRightZoneClear()){
+	        			else if (!mv.isUpZoneClear() && mv.isLeftZoneClear() && mv.isRightZoneClear() && mv.isDownZoneClear())
+	        			{
+	        				forward = 0.3f;
+	        				turnRate = 0;
+	        			}
+	        			else if (!mv.isRightZoneClear() && !mv.isLeftZoneClear() && mv.isDownZoneClear() && mv.isUpZoneClear())
+	        			{
+	        				forward = 0.3f;
+	        				turnRate = 0;
+	        			}
+	        			else if(!mv.isRightZoneClear() && !mv.isDownZoneClear() && mv.isLeftZoneClear() && mv.isUpZoneClear())
+	        			{
+	        				forward = 0;
+	        				turnRate = -0.3f;
+	        			}
+	        			else if(mv.isRightZoneClear() && !mv.isDownZoneClear() && !mv.isLeftZoneClear() && mv.isUpZoneClear())
+	        			{
+	        				forward = 0;
+	        				turnRate = 0.3f;
+	        			}
+	        			else if(!mv.isDownZoneClear() && mv.isLeftZoneClear() && mv.isRightZoneClear() && mv.isUpZoneClear())
+	        			{
+	        				forward = 0;
+	        				turnRate = 0;
+	        			}
+	        			else if(mv.isDownZoneClear() && mv.isLeftZoneClear() && mv.isRightZoneClear() && mv.isUpZoneClear())
+	        			{
+	        				forward = 0.4f;
+	        				turnRate = 0;
+	        			}
+	        			else if (!mv.isDownZoneClear() && !mv.isLeftZoneClear() && !mv.isRightZoneClear() && !mv.isUpZoneClear())
+	        			{
+	        				forward = 0;
+	        				turnRate = 0.2f;
+	        			}
+	        			else if (mv.isDownZoneClear() && !mv.isUpZoneClear() && !mv.isLeftZoneClear() && !mv.isRightZoneClear())
+	        			{
+	        				forward = 0.2f;
+	        				turnRate = 0;
+	        			}
+	        			else
+	        			{
+	        				forward = 0;
+	        				turnRate = 0.2f;
+	        			}
+	        			
+	        			/*
+	        			if(!mv.isDownZoneClear())
+	        			{
+	        				if(!mv.isLeftZoneClear() && !mv.isRightZoneClear() )
+	        				{
+	        					forward = 0;
+	        					turnRate = 0;
+	        				}
+	        				else
+	        				{
+	        					if(!mv.isLeftZoneClear())
+	        					{
+	        						forward = 0;
+	        					    turnRate = 0.3f;
+	        					}
+	        					else if(!mv.isRightZoneClear())
+	        					{
+	        						forward = 0;
+	        						turnRate = -0.3f;
+	        					}
+	        				}
+
+	        			}
+	        			else if(!mv.isUpZoneClear())
+	        			{
+	        				if(mv.isDownZoneClear())
+	        				{
+	        					if(!mv.isLeftZoneClear() && !mv.isRightZoneClear())
+	        					{
+	        						forward = 0.3f;
+			        				turnRate = 0;
+	        					}
+	        					else if(mv.isLeftZoneClear() && mv.isRightZoneClear())
+	        					{
+	        						forward = 0.3f;
+	        						turnRate = 0;
+	        					}
+	        					else if(mv.isRightZoneClear())
+	        					{
+	        						forward = 0.3f;
+	        						turnRate = 0.3f;
+	        					}
+	        					else if(mv.isLeftZoneClear())
+	        					{
+	        						forward = 0.3f;
+	        						turnRate = -0.3f;
+	        					}
+		        			}
+	        				else if(!mv.isDownZoneClear())
+	        				{
+	        					if(!mv.isLeftZoneClear() && !mv.isRightZoneClear())
+	        					{
+	        						forward = 0;
+	        						turnRate = 0;
+	        					}
+	        					else if(mv.isLeftZoneClear())
+	        					{
+	        						forward = 0;
+	        						turnRate = -0.3f;
+	        					}
+	        					else if(mv.isRightZoneClear())
+	        					{
+	        						forward = 0;
+	        						turnRate = 0.3f;
+	        					}
+	        				}
+	        				
+	        			}
+	        			else
+        				{
+        					forward = 0.3f;
+        					turnRate = 0;
+        				}*/
+	        			
+	        			
+	        			/*if(!mv.isDownZoneClear()){
+	        				turnRate = 0;
+	        				System.out.println("Bottom don't move");
+	        			}else if(!mv.isLeftZoneClear() && !mv.isRightZoneClear()){
 	        				turnRate = 0;
 	        				System.out.println("Can't move");
-	        			}
+	        			}else if(!mv.isLeftZoneClear()){
+	        				turnRate = 0.3f;
+	        				System.out.println("In left zone");
+	        			}else if(!mv.isRightZoneClear()){
+	        				turnRate = -0.3f;
+	        				System.out.println("In right zone");
+	        			}*/
+	        			
 	        			int leftMotor = Math.round((RobotMessageControl.convert(forward, turnRate / 2.0f) + 1) * 90);
 	        			int rightMotor = Math.round((RobotMessageControl.convert(forward, -turnRate / 2.0f) + 1) * 90);
 	        			
