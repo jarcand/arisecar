@@ -234,9 +234,9 @@ public class AutonomousControl {
 			deltaSpeed = -MAX_SPEED_CHANGE;
 		}
 		
-		if (deltaYaw > MAX_YAW_CHANGE && turnRate > 0) {
+		if (deltaYaw > MAX_YAW_CHANGE) {
 			deltaYaw = MAX_YAW_CHANGE;
-		} else if (deltaSpeed < -MAX_YAW_CHANGE && turnRate < 0) {
+		} else if (deltaSpeed < -MAX_YAW_CHANGE) {
 			deltaYaw = -MAX_YAW_CHANGE;
 		}
 		
