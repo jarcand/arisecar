@@ -5,14 +5,19 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.geom.Point2D;
 import java.io.FileNotFoundException;
+import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 import networking.KeyboardMovement;
 import networking.Message;
+import networking.MessageFactory;
 import networking.XboxMovement;
 
 public class GuardGUI {
@@ -28,8 +33,8 @@ public class GuardGUI {
 	private JLabel zones;
 	private JLabel instructions;
 	
-	public GuardGUI(Guard guard) {
-		this.guard = guard;
+	public GuardGUI(Guard guard2) {
+		this.guard = guard2;
 		
 		frame = new JFrame("GuardControl") {
 			private static final long serialVersionUID = -9188506391582322204L;
@@ -46,9 +51,23 @@ public class GuardGUI {
 		frame.setSize(1600, 800);
 		
 		zones = new JLabel("nothing");
+		instructions = new JLabel("nothing");
+		final JCheckBox mvOnChk = new JCheckBox("MV On");
+		
+		JPanel panel = new JPanel();
+		panel.add(zones);
+		panel.add(instructions);
+		panel.add(mvOnChk);
+		
+		mvOnChk.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+		
+				guard.getClient().sendToServer(MessageFactory.createMVInstruction(Guard.DefaultName, mvOnChk.isSelected()));			
+			}
+		});
+		
 		frame.getContentPane().add(zones, BorderLayout.NORTH);
 		
-		instructions = new JLabel("nothing");
 		frame.getContentPane().add(instructions, BorderLayout.SOUTH);
 		
 		frame.setVisible(true);

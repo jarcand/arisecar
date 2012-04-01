@@ -44,12 +44,12 @@ public class HostServer extends AbstractServer {
 	@Override
 	public void handleMessageFromClient(Object msg, ConnectionToClient client){
 		if(msg instanceof Message){
-			Message message = (Message)msg;
+/*			Message message = (Message)msg;
 			if(message.isFromRobot()){
 				log.messageFromRobot(message.toString(), message.getRobotName());
 			}else if(message.isFromClient()){
 				log.messageFromClient(message.toString(), client.getInetAddress().toString());
-			}
+			}*/
 			sendToAllClients(msg);
 		}
 	}
