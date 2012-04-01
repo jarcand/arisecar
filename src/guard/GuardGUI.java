@@ -86,7 +86,6 @@ public class GuardGUI {
 						Thread.sleep(50);
 					} catch (InterruptedException e) {
 					}
-					
 				}
 			}
 		}
