@@ -34,14 +34,16 @@ public class VehicleModel {
 	public VehicleModel(){
 		
 		// Connect to the loco arduino
+		SerialDeviceID devId = new SerialDeviceID(0x70);
 		try {
-			locoArduino = new LocoArduino(new SerialDeviceID(0x70)) {
+			locoArduino = new LocoArduino(devId) {
 				protected void inputsUpdated() {
 					updatePosition();
 				}
 			};
+			Log.logInfo("Connected to LocoArduino(" + devId + ") on port " + locoArduino.getPort());
 		} catch (SerialDeviceInitException e) {
-			Log.logFatal("Cannot connect to loco arduino.");
+			Log.logFatal("Could not connect to LocoArduino(" + devId + ").");
 		}
 	}
 	
@@ -119,8 +121,8 @@ public class VehicleModel {
 	 * Recalculate the speed/yaw mix to give the left/right motor speeds.
 	 */
 	private void recalcMix() {
-		setLeftMotor(Tools.axisToPWM(Tools.mixSpeedYaw(speed, yawRate / 2)));
-		setRightMotor(Tools.axisToPWM(Tools.mixSpeedYaw(speed, -yawRate / 2)));
+		setLeftMotor(Tools.axisToPWM(Tools.mixSpeedYaw(speed, yawRate)));
+		setRightMotor(Tools.axisToPWM(Tools.mixSpeedYaw(speed, -yawRate)));
 	}
 	
 	/**
