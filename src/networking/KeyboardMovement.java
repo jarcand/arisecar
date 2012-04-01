@@ -1,7 +1,11 @@
 package networking;
 
-public class KeyboardMovement {
+import java.io.Serializable;
+
+public class KeyboardMovement implements Serializable {
 	
+    private static final long serialVersionUID = 8378035245359055474L;
+    
 	public final Direction direction;
 	public final State state;
 	

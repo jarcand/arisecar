@@ -2,7 +2,7 @@ package networking;
 
 import java.io.Serializable;
 
-public class Message implements Serializable{
+public class Message implements Serializable {
 	
 	private static final long serialVersionUID = -6242001330568255693L;
 	

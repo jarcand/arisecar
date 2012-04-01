@@ -1,10 +1,13 @@
 package networking;
 
+import java.io.Serializable;
 import robot.VehicleModel;
 
 
-public class VehicleUpdate {
+public class VehicleUpdate implements Serializable {
 	
+    private static final long serialVersionUID = -4554689134429484514L;
+    
 	public final double posX;
 	public final double posY;
 	public final double radius;
