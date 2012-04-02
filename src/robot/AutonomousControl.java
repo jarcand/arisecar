@@ -1,5 +1,7 @@
 package robot;
 
+import ca.ariselab.utils.BoolDebounce;
+
 /**
  * This class contains the algorithms necessary to give the vehicle autonomous
  * control based on the provided machine vision client.
@@ -10,7 +12,7 @@ public class AutonomousControl {
 	private static final float NORMAL_FORWARD_RATE = 0.3f;
 	private static final float SLOW_FOWARD_RATE = 0.15f;
 	private static final float STOPPED_TURN_RATE = 0.07f;
-	private static final float MOVING_TURN_RATE = 0.2f;
+	private static final float MOVING_TURN_RATE = 0.1f;
 	private static final float NO_PASS_TURN_RATE = 0.07f;
 	
 	private static final float MAX_SPEED_CHANGE = 0.02f;
@@ -18,6 +20,8 @@ public class AutonomousControl {
 	
 	private final VehicleModel v;
 	private final MVClient mv;
+	
+	private BoolDebounce downZoneClear, upZoneClear, leftZoneClear, rightZoneClear;
 	
 	private float lastSpeed = 0;
 	private float lastYaw = 0;
@@ -28,6 +32,11 @@ public class AutonomousControl {
 	public AutonomousControl(VehicleModel v, MVClient mv) {
 		this.v = v;
 		this.mv = mv;
+		
+		downZoneClear = new BoolDebounce(false, 100);
+		upZoneClear = new BoolDebounce(false, 100);
+		leftZoneClear = new BoolDebounce(false, 100);
+		rightZoneClear = new BoolDebounce(false, 100);
 	}
 	
 	/**
@@ -48,18 +57,22 @@ public class AutonomousControl {
 			return false;
 		}
 		
+		downZoneClear.set(mv.isDownZoneClear());
+		leftZoneClear.set(mv.isLeftZoneClear());
+		rightZoneClear.set(mv.isRightZoneClear());
+		upZoneClear.set(mv.isUpZoneClear());
 		
 		Float forward;
 		Float turnRate;
 		
-		if (!mv.isDownZoneClear()) {
+		if (!downZoneClear.get()) {
 			forward = 0.0f;
 			
-			if (mv.isLeftZoneClear() == mv.isRightZoneClear()) {
+			if (leftZoneClear == rightZoneClear) {
 				turnRate = NO_PASS_TURN_RATE;
-			} else if (!mv.isLeftZoneClear()) {
+			} else if (!leftZoneClear.get()) {
 				turnRate = STOPPED_TURN_RATE;
-			} else if (!mv.isRightZoneClear()) {
+			} else if (!rightZoneClear.get()) {
 				turnRate = -STOPPED_TURN_RATE;
 			} else {
 				turnRate = 0.0f;
@@ -68,19 +81,19 @@ public class AutonomousControl {
 			
 		} else {
 			
-			if (!mv.isUpZoneClear()) {
+			if (!upZoneClear.get()) {
 				forward = 0.0f;
-			} else if (!mv.isLeftZoneClear() && !mv.isRightZoneClear()) {
+			} else if (!leftZoneClear.get() && !rightZoneClear.get()) {
 				forward = SLOW_FOWARD_RATE;
 			} else {
 				forward = NORMAL_FORWARD_RATE;
 			}
 			
-			if (mv.isLeftZoneClear() == mv.isRightZoneClear()) {
+			if (leftZoneClear == rightZoneClear) {
 				turnRate = 0.0f;
-			} else if (!mv.isLeftZoneClear()) {
+			} else if (!leftZoneClear.get()) {
 				turnRate = MOVING_TURN_RATE;
-			} else if (!mv.isRightZoneClear()) {
+			} else if (!rightZoneClear.get()) {
 				turnRate = -MOVING_TURN_RATE;
 			} else {
 				turnRate = 0.0f;
