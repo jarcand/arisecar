@@ -195,7 +195,7 @@ public abstract class LocoArduino extends SerialModule {
 	 * @param leftMotor The servo position of the ESC controlling the motor.
 	 */
 	public void setMotorL(int leftMotor) {
-		motorLOut = leftMotor;
+		motorLOut = (int) (1.1 * (leftMotor - 90)) + 90;
 	}
 
 	/**

@@ -7,11 +7,11 @@ package robot;
  */
 public class AutonomousControl {
 	
-	private static final float NORMAL_FORWARD_RATE = 0.3f;
+	private static final float NORMAL_FORWARD_RATE = 0.5f;
 	private static final float SLOW_FOWARD_RATE = 0.15f;
-	private static final float STOPPED_TURN_RATE = 0.07f;
+	private static final float STOPPED_TURN_RATE = 0.1f;
 	private static final float MOVING_TURN_RATE = 0.1f;
-	private static final float NO_PASS_TURN_RATE = 0.07f;
+	private static final float NO_PASS_TURN_RATE = 0.1f;
 	
 	private static final float MAX_SPEED_CHANGE = 0.02f;
 	private static final float MAX_YAW_CHANGE = 0.02f;
@@ -73,7 +73,7 @@ public class AutonomousControl {
 		} else {
 			
 			if (!upZoneClear) {
-				forward = 0.0f;
+				forward = NO_PASS_TURN_RATE;
 			} else if (!leftZoneClear && !rightZoneClear) {
 				forward = SLOW_FOWARD_RATE;
 			} else {
