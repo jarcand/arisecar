@@ -36,6 +36,7 @@ public class RobotClient extends AbstractClient {
 		v = new VehicleModel();
 		try {
 	        mv = new MVClient(mvHost, mvPort);
+	        mv.startContinuousClearance();
 	        Log.logInfo("Connected to MV server at " + mvHost + ":" + mvPort);
         } catch (UnknownHostException e1) {
         	Log.logError("Could not find MV server at " + mvHost + ":" + mvPort);
