@@ -1,7 +1,5 @@
 package robot;
 
-import ca.ariselab.utils.BoolDebounce;
-
 /**
  * This class contains the algorithms necessary to give the vehicle autonomous
  * control based on the provided machine vision client.
@@ -21,8 +19,6 @@ public class AutonomousControl {
 	private final VehicleModel v;
 	private final MVClient mv;
 	
-	private BoolDebounce downZoneClear, upZoneClear, leftZoneClear, rightZoneClear;
-	
 	private float lastSpeed = 0;
 	private float lastYaw = 0;
 	
@@ -32,11 +28,6 @@ public class AutonomousControl {
 	public AutonomousControl(VehicleModel v, MVClient mv) {
 		this.v = v;
 		this.mv = mv;
-		
-		downZoneClear = new BoolDebounce(false, 100);
-		upZoneClear = new BoolDebounce(false, 100);
-		leftZoneClear = new BoolDebounce(false, 100);
-		rightZoneClear = new BoolDebounce(false, 100);
 	}
 	
 	/**
@@ -57,22 +48,22 @@ public class AutonomousControl {
 			return false;
 		}
 		
-		downZoneClear.set(mv.isDownZoneClear());
-		leftZoneClear.set(mv.isLeftZoneClear());
-		rightZoneClear.set(mv.isRightZoneClear());
-		upZoneClear.set(mv.isUpZoneClear());
+		boolean downZoneClear = mv.isDownZoneClear();
+		boolean leftZoneClear = mv.isLeftZoneClear();
+		boolean rightZoneClear = mv.isRightZoneClear();
+		boolean upZoneClear = mv.isUpZoneClear();
 		
 		Float forward;
 		Float turnRate;
 		
-		if (!downZoneClear.get()) {
+		if (!downZoneClear) {
 			forward = 0.0f;
 			
 			if (leftZoneClear == rightZoneClear) {
 				turnRate = NO_PASS_TURN_RATE;
-			} else if (!leftZoneClear.get()) {
+			} else if (!leftZoneClear) {
 				turnRate = STOPPED_TURN_RATE;
-			} else if (!rightZoneClear.get()) {
+			} else if (!rightZoneClear) {
 				turnRate = -STOPPED_TURN_RATE;
 			} else {
 				turnRate = 0.0f;
@@ -81,9 +72,9 @@ public class AutonomousControl {
 			
 		} else {
 			
-			if (!upZoneClear.get()) {
+			if (!upZoneClear) {
 				forward = 0.0f;
-			} else if (!leftZoneClear.get() && !rightZoneClear.get()) {
+			} else if (!leftZoneClear && !rightZoneClear) {
 				forward = SLOW_FOWARD_RATE;
 			} else {
 				forward = NORMAL_FORWARD_RATE;
@@ -91,9 +82,9 @@ public class AutonomousControl {
 			
 			if (leftZoneClear == rightZoneClear) {
 				turnRate = 0.0f;
-			} else if (!leftZoneClear.get()) {
+			} else if (!leftZoneClear) {
 				turnRate = MOVING_TURN_RATE;
-			} else if (!rightZoneClear.get()) {
+			} else if (!rightZoneClear) {
 				turnRate = -MOVING_TURN_RATE;
 			} else {
 				turnRate = 0.0f;
