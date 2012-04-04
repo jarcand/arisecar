@@ -72,10 +72,11 @@ public class GuardGUI {
 		
 		frame.setVisible(true);
 		
-		XboxControl xboxListener = new XboxControl();
+/*		XboxControl xboxListener = new XboxControl();
 		xboxListener.start();
-	}
+*/	}
 	
+	@SuppressWarnings("unused")
 	private class XboxControl extends Thread {
 		public void run() {
 			XboxController controller = null;

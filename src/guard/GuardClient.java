@@ -11,14 +11,17 @@ import com.lloseng.ocsf.client.AbstractClient;
 
 public class GuardClient extends AbstractClient {
 
+	//public static String HOST = "192.168.3.103";
+	public static String HOST = "localhost";
+	
 	private final Guard guard;
 
 	public GuardClient(Guard guard){
-		this("localhost", 5555, guard);
+		this(HOST, 5555, guard);
 	}
 
 	public GuardClient(int port, Guard guard){
-		this("localhost", port, guard);
+		this(HOST, port, guard);
 	}
 
 	public GuardClient(String host, int port, Guard guard){
